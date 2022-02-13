@@ -1,0 +1,75 @@
+.m-canvasWrap {
+    position: relative; box-sizing: border-box;
+    .drawTool {
+        @toolSize: 42px;
+        position: absolute; top: 0; right: 0;
+        width: @toolSize + 16px; padding: 8px;font-size: @toolSize/2;
+        .Tool { position: relative; width: @toolSize; height: @toolSize; z-index: 100; margin-bottom: 4px;
+            &.hide {
+                ul {
+                    width: 0;
+                }
+                
+            }
+            &.show {
+                .icon {
+                    background-color: #F16F26; color: #FFF;border: none;
+                }
+                ul {
+                    width: auto;
+                }
+            }
+            .icon { position: relative; z-index: 110;
+                display: flex;justify-content: center;align-items: center;
+                width: @toolSize; height: @toolSize; background-color: #FFF; border: 1px dashed #DFDFDF;
+            }
+            ul { position: absolute;top: 0; right: @toolSize + 4px; z-index: 100; overflow: hidden;
+                display: flex;align-items: center;margin: 0;padding: 0; }
+            li {display: flex;justify-content: center;align-items: center;
+                width: @toolSize; height: @toolSize;border: 1px dashed #DDD;margin-left: 4px; box-sizing: border-box;
+                background-color: #FFF;}
+            ul.lineWidth {
+                li {
+                    &.active {
+                        &:after { background-color: #00D705;border-color: #00D705 }
+                    }
+                    &:after { content: ' ';display: block; border: 1px solid #000;}
+                    &.w1 {
+                        &:after { width: 10px; height: 10px;}
+                    }
+                    &.w2 {
+                        &:after { width: 15px; height: 15px;}
+                    }
+                    &.w3 {
+                        &:after { width: 20px; height: 20px;}
+                    }
+                }
+            }
+            ul.flags {
+                li {
+                    border: 10px solid #E8E8E8;box-sizing: border-box;background-clip: content-box;
+                }
+            }
+        }
+    }
+    .canvasContainer {
+        position: relative;z-index: 90;
+        width: 100%;
+        .canvasIncStyle {
+            position: relative;z-index: 92;
+        }
+        .canvasQuestionImages { position: absolute;top: 0;left: 0;z-index: 91;width: 100%;height: 100%;
+            img {display: block; width: 85.1%; }
+        }
+        .drawedImage { position: absolute;top: 0;left: 0;z-index: 92;width: 100%;height: 100%;
+            figure {display: block;
+                position: absolute;left: 0;top: 0;
+                width: 100%;margin: 0;padding: 0;}
+            img {display: block; width: 100%; }
+        }
+    }
+    .erase { display: none; position: absolute;top: 4px;left: 0; z-index: 120; border: 1px solid #DDD;pointer-events: none;box-sizing: border-box;
+        &.show {display: block;}
+    }
+    
+}

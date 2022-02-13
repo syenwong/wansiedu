@@ -1,0 +1,134 @@
+.g-checkAnswerHomework {
+    width: 100%; background-color: #F0F0F0;
+    .g-chAnHeader {
+        position: relative;
+        display: flex;align-items: center;justify-content: space-between;
+        width: 100%; height: 42px; padding: 0 16px; box-sizing: border-box;border-bottom: 1px dashed #DDD;
+        background-color: #FFF; font-size: 14px;
+        .ant-tag {
+            margin: 0 8px;font-size: 14px;
+        }
+        .homeworkInfo {display: flex;}
+        .backForward { position: absolute; right: 8px; top: 2px;}
+    }
+    .g-chAnContent {
+        display: flex;align-items: stretch;
+        width: 100%; overflow: hidden;
+        .g-chAnSubject,
+        .g-chAnStudents {
+            flex-grow: 0; flex-shrink: 0;
+            background-color: #FFF; box-sizing: border-box;overflow: auto;
+            h1 {margin: 6px; font-size: 14px; line-height: 18px; height: 27px; border-bottom: 1px dashed #DFDFDF}
+            h2 { margin: 6px; font-size: 12px;line-height: 18px; height: 27px;background: #FFF;border-bottom: 1px dashed #DFDFDF}
+            ul {
+                padding: 8px;
+                &.notStart {
+                    li {
+                        background-color: #F4F4F4; color: #A2A2A2;
+                    }
+                }
+            }
+            li { display: flex;justify-content: space-between; align-items: center;
+                height: 32px; margin-bottom: 4px;
+                cursor: pointer}
+        }
+        .g-chAnStudents {
+            border-right: 1px dashed #DDD;
+            ul {
+                li { padding: 0 16px; background-color: #F7F7F7;color: #5E5E5E;
+                    &.active { color: #FFF;background: #0097EB;
+                        .isChecked {color: #FFF;}
+                    }
+                    &.noAnswer { background-color: #FBFBFB; color: #E1E1E1;}
+                    .isChecked {color: #00A505;}
+                }
+            }
+        }
+        .g-chAnSubject {
+            border-left: 1px dashed #DDD;
+            ul {
+                li { padding: 0; background-color: #F7F7F7;color: #5E5E5E;
+                    &.active { color: #FFF;background: #0097EB;
+                        .basic {
+                            .no {color: #FFF;}
+                        }
+                        .isChecked {color: #FFF;}
+                    }
+                    &.noAnswer { background-color: #FBFBFB; color: #666;
+                        .basic {
+                            .no {color: #E1E1E1; font-weight: 400}
+                        }
+                    }
+                    .isChecked { color: #00A505;}
+                }
+                .basic { display: flex; align-items: center;
+                    .no {display: flex; align-items: center; justify-content: flex-start;
+                        width: 36px; height: 32px; margin-left: 16px;
+                        color: #5A94D3; font-weight: 700;font-size: 16px;}
+                }
+                .type {
+                    .ant-tag { margin-right: 6px;}
+                }
+            }
+        }
+        
+        .g-chAn {
+            flex-grow: 2; background-color: #FFF;
+            
+        }
+        .operate { width: 100%; height: 48px;border-top: 1px dashed #DDD;box-sizing: border-box}
+        .anCanvasContainer { position: relative; width: 100%;}
+        .questionsUrl {
+            position: absolute;top: 48px;left: 0; z-index: 10; width: 85.1%;
+            img { display: block;width: 100%;}
+        }
+        .answerUrl {
+            position: absolute;top: 48px;left: 0; z-index: 20; width: 100%;
+            img { display: block;width: 100%;}
+        }
+        .anCanvas { position: relative; z-index: 30;}
+        
+        
+    }
+    .m-anInfo {
+        display: flex; justify-content: space-between;align-items: center;
+        width: 100%; height: 36px; box-sizing: border-box; margin: 0 auto;
+        .anInfoContent {
+            
+            .ant-tag {font-size: 16px; padding: 4px 8px}
+            
+            display: flex; align-items: center; }
+        
+        
+        .anType {display: flex; align-items: center;
+            .no { display: flex; justify-content: center;align-items: center; height: 48px; font-size: 16px; font-weight: 700;margin-right: 10px; color: #096DD9;}
+        }
+        .anInfoOperate {
+            display: flex;align-items: center;
+            .ant-form-item { margin-bottom: 0;}
+            .steps {
+                display: flex;align-items: center;height: 32px; margin-left: 8px; margin-right: 16px;
+                span {display: flex;justify-content: center;align-items: center; user-select: none; cursor: pointer;
+                    width: 45px;height: 32px; margin: 0 2px 0 0;
+                    color: #FFF;background: #1890FF;font-size: 12px;
+                    &.cur { background-color: #16B037;}
+                }
+            }
+            .operateDone { margin: 0 16px;}
+            
+        }
+        .subjectSwitch { padding: 0 10px;}
+        .StepBackwardOutlined,
+        .StepForwardOutlined {
+            display: flex;justify-content: center;align-items: center;
+            width: 60px;
+            height: 32px;
+            font-size: 32px;
+            /* margin: 0 16px; */
+            color: #FFF;
+            background-color: #00A4FF;
+            overflow: hidden;
+        }
+    }
+}
+

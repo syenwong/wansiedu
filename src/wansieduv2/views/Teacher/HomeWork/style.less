@@ -1,0 +1,95 @@
+
+.g-homeworklist {
+    .link { color: #0F6DC3; cursor: pointer }
+}
+.g-searchForm {
+    padding: 16px;
+}
+
+.g-currentHomework {
+    display: flex; flex-direction: column;
+    align-items: stretch;
+    h2 { height: 36px; flex-grow: 0;flex-shrink: 0}
+    .currentContent {
+        flex-grow: 2;
+        display: flex;align-items: stretch;
+        width: 100%; border: 1px solid #DDD;
+        .studentContent {
+            flex-grow: 0;flex-shrink: 0;
+            width: 220px; padding: 15px; border-right: 1px solid #DDD;box-sizing: border-box;
+            overflow: auto;
+        }
+        .hkContent { flex-grow: 2;
+            overflow: auto;
+            .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+                padding: 8px 6px;
+            }
+        }
+    }
+}
+
+.homeworkDetail {
+    display: flex;justify-content: space-between; align-items: center;
+    width: 98%;
+}
+
+
+.g-homeworkcontentSteps {
+    .step {
+        &.n {display: none}
+    }
+}
+.g-homeworkinfo {
+    padding: 54px 48px; background-color: #FFF;
+    .whInfoForm {
+        width: 640px; margin: 0 auto 60px;
+    }
+    .u-formBtnWrap {
+        margin-top: 64px;
+    }
+    .ant-picker.ant-picker-range {width: 100%;}
+}
+
+.g-homeworkSelectStudent {
+    padding: 20px;
+    background-color: #FFF;
+}
+.g-homeworkcontentSteps {
+    .step {
+        &.n {display: none}
+    }
+}
+.g-homeworkinfo {
+    padding: 54px 48px; background-color: #FFF;
+    .whInfoForm {
+        width: 640px; margin: 0 auto 60px;
+    }
+    .u-formBtnWrap {
+        margin-top: 64px;
+    }
+    .ant-picker.ant-picker-range {width: 100%;}
+}
+
+.g-homeworkSelectStudent {
+    padding: 20px;
+    background-color: #FFF;
+    
+    .g-TableTransfer {
+    
+    }
+}
+
+.g-homeworkSelectExaPaper {
+    .selectedPaper {
+        display: flex; justify-content: space-between;
+        background: #FBF3EA;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #FFBA88;
+        .selectedPaper-current {
+            display: flex; justify-content: space-between; width: 100%;
+            p {font-size: 16px; margin-bottom: 0; color: #7F3618}
+        }
+    }
+}
+

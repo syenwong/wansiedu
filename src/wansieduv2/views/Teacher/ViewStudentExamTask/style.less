@@ -1,0 +1,164 @@
+.g-TeacherViewExamPaperWrap {
+    @subjectListSize: 64%;
+    @subjectSpeacePadding: 42px;
+    width: 100%; box-sizing: border-box;padding-top: 1px;
+    .addBtnWrap {
+        display: flex;justify-content: space-between;align-items: center;
+        margin: 16px 0 0 @subjectSpeacePadding; padding: 16px;
+        border: 1px dashed #1890FF;
+        font-size: 30px;background: #FFF;color: #1890FF; cursor: pointer;
+    }
+    .g-viewExamPaper_info {
+        display: flex; align-items: stretch; justify-content: space-between;
+        width: 100%; background-color: #FFF; padding: 4px 16px; box-sizing: border-box;
+        border-bottom: 1px solid #DDD;
+        .viewExamPaper_info_left {
+            flex-grow: 2;display: flex;
+            .basic,
+            .label { display: flex; align-items: center; height: 2.5em;
+                .ant-tag { margin: 0 2px 0 0;}
+            }
+            .basic {
+                .ant-tag { margin: 0 6px;}
+            }
+            .label {
+                margin-left: 32px;border-left: 1px dashed #DDD; padding: 0 32px;border-right: 1px dashed #DDD;
+            }
+        }
+        .backBtn {
+            display: flex;justify-content: flex-end; align-items: center;
+            width: 165px;border-left: 1px dashed #DDD; margin-left: 16px;
+            button {
+                margin-left: 8px;
+            }
+        }
+        
+        h4 {font-size: 14px; font-weight: 700; margin: 0 32px 0 0;}
+        .item {
+            display: inline-block;
+            margin-right: 32px;
+        }
+        
+    }
+    .g-viewExamPaperSubjectsList {
+        @subjectSpeacePadding: 42px;
+        display: flex; justify-content: space-between;
+        width: 100%; padding: 0 16px; box-sizing: border-box; overflow: auto;
+        .none {
+            display: flex;justify-content: center; align-items: center;
+            height: 4em;
+        }
+        
+        .g-subjects {
+            padding-left: @subjectSpeacePadding; width: @subjectListSize;
+            li.mainSubject {
+                position: relative;
+                min-height: 210px; box-shadow: 0 0 5px #D7D7D7; box-sizing: border-box; background-color: #FFF;
+                margin-top: 16px;
+                padding: 16px 24px;
+            }
+            .mainSubject_content {
+                border: 1px solid #EEE;
+                padding: 10px;
+                img {display: block;max-width: 860px; }
+            }
+            .subjectLabel {
+                position: absolute; left: -@subjectSpeacePadding; top: 32px;
+                display: flex;justify-content: center;align-items: center;flex-direction: column;
+                width: @subjectSpeacePadding;
+                .No { display: flex; justify-content: center; align-items: center;
+                    width: @subjectSpeacePadding; height: 36px;
+                    background-color: #1890FF; color: #FFF;font-size: 16px;font-weight: 700;
+                }
+                .delete { margin-top: 8px;}
+                button,
+                .No {
+                    margin-bottom: 8px;
+                }
+                .hoverShow { visibility: hidden}
+                &:hover {
+                    .hoverShow { visibility: visible}
+                }
+            }
+            .subSubject {
+                li { padding: 16px 0; border-bottom: 1px solid #EFEFEF;
+                    &:last-child {border-bottom: none}
+                }
+            }
+        }
+        
+        .m-subjectItem-studentView {
+            position: relative;
+            
+            .ant-ribbon-wrapper {padding: 8px;
+                .ant-ribbon-text {font-size: 16px; font-weight: 700; padding: 0 8px}
+            }
+            .subSubjectNo {
+                position: absolute;left: -22px;top: 0;
+                display: flex; justify-content: center; align-items: center; height: 36px; padding: 0 8px; margin-right: 8px; font-size: 16px;font-weight: 700;
+                background-color: #16B037; color: #FFF}
+            .subjectInfo {
+                display: flex;
+                width: 100%; height: 43px;
+                border-bottom: 1px dashed #EFEFEF;
+                &.pl {padding-left: 48px;}
+                .score {
+                    display: flex;align-items: center; height: 32px;
+                }
+                .operate {
+                    flex-grow: 2;
+                    display: flex;justify-content: flex-end;
+                    button { margin-left: 8px;}
+                }
+            }
+            .subjectRemark {
+                padding: 8px 0;
+            }
+            .answerImgsContainer {
+                position: relative;
+                img {display: block; }
+                .questionUrls {
+                    position: absolute;top: 0;left: 0;z-index: 80;width: 85.1%;
+                    &.visible {
+                        position: static;
+                    }
+                    img {width: 100%;}
+                }
+                .answerUrl {
+                    position: absolute;top: 0;left: 0;z-index: 90;width: 100%;
+                    img {width: 100%;}
+                }
+                .checkUrl {
+                    position: absolute;top: 0;left: 0;z-index: 100;width: 100%;
+                    img {width: 100%;}
+                }
+            }
+            
+        }
+        .ant-tag {font-size: 14px;
+            &.score {font-size: 16px;}
+        }
+        .ant-image-mask {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+    }
+    .g-typeDetailsMap { margin-top: 16px; overflow: auto;
+        .ant-tag {font-size: 12px;}
+        .typeDetailsNum {
+            dl { margin-top: 16px;}
+            dt { border-bottom: 1px dashed #D7D7D7; margin-bottom: 6px;}
+            .ant-tag {margin-bottom: 3px;}
+        }
+    }
+    .g-subjectNav { display: flex;flex-direction: column;
+        flex-wrap: wrap;
+        align-content: start;
+        margin-top: 16px;border-right: 1px dashed #D7D7D7;
+        
+        li { width: 3em; margin-bottom: 2px; margin-right: 8px; border: 1px solid #1890FF; color: #1890FF; text-align: center; cursor: pointer; font-size: 16px; font-weight: 700;
+            &.hasError { background-color: #FF6D19; color: #FFF; border: none}
+            &.noAnswer { font-weight: 400; border-color: #E2E2E2;color: #E2E2E2;}
+            &.unckecked {font-weight: 400; border-color: #BFE2FF;color: #BFE2FF;}
+        }
+    }
+}

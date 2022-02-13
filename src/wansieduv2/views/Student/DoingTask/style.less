@@ -1,0 +1,68 @@
+.g-exercisingSubjectContent {
+    width: 100%; box-sizing: border-box;
+    .exercising_top {
+        @topSize: 42px;
+        display: flex;justify-content: space-between;align-items: center;
+        width: 100%; height: @topSize; background-color: #2072AD;; color: #FFF; line-height: 18px;
+        .name {
+            display: flex;justify-content: center;align-items: center;
+            height: @topSize; margin: 0; padding: 0 5px;
+            button { margin-right: 16px;
+            }
+        }
+        .operate {
+            display: flex;justify-content: center;align-items: center;
+            .TimeReader {
+                display: flex;justify-content: center;align-items: center;
+                width: 180px;
+                text-align: center;
+                color: #FFF;
+                font-size: 16px;
+                height: 42px;
+                &.green { background-color: #28B380;}
+                &.red { background-color: #E50000;}
+            }
+        }
+        .submitPaper {
+            display: flex;justify-content: center;align-items: center;
+            width: 150px; height: @topSize; border: 0; background-color: #177B72; font-size: 16px;}
+        
+    }
+    .exercising_header {
+        @headerSize: 32px;
+        display: flex; align-items: stretch;
+        width: 100%; height: @headerSize *2;
+        .changeSubject {
+            display: flex;justify-content: center;align-items: center;
+            width: 100px; height: @headerSize * 2; border: 0 solid #DDD; box-sizing: border-box;
+            color: #2474CE;font-size: 54px; line-height: 60px; background-color: #FFF;transition: all .5s; border-bottom: 1px solid #E7E7E7;
+            &.next { border-left: 1px solid #E7E7E7;}
+            &:hover { background-color: #2474CE; color: #FFF;}
+        }
+        .exercising_num {
+            flex-grow: 2;
+            margin: 0;
+            display: flex; align-content: center; flex-wrap: wrap;
+            li {
+                position: relative;
+                display: flex;justify-content: center;align-items: center;
+                width: 5%; height: @headerSize; box-sizing: border-box;
+                border: 0 solid #E7E7E7; border-left-width: 1px;border-bottom-width: 1px;
+                color: #00A4FF;font-size: 16px;user-select: none; cursor: pointer;font-weight: 700;
+                .flag {
+                    position: absolute;left: 0;top: 0;
+                    width: 0;height: 0;border-width: 10px; border-style: solid;border-color: transparent;}
+                &.done { background-color: #60C6FF; color: #FFF;}
+                &.nor { background-color: #EDF8FF; }
+                &.now { background-color: #FD542D; color: #FFF; }
+            }
+        }
+    }
+    .exercising_canvas_wrap {
+        display: flex; align-items: center;
+        width: 99.99%; overflow: hidden; border-bottom: 1px dashed #E2D3B6;
+    }
+    
+    .exercising_paper { }
+    .exercising_draft { border-left: 1px dashed #E2D3B6; box-sizing: border-box;}
+}

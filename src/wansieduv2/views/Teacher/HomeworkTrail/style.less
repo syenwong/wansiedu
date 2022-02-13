@@ -1,0 +1,24 @@
+.g-HomeworkTrail {
+    width: 100%;
+    padding: 16px; overflow-x: auto;
+    .header {
+        display: flex;justify-content: space-between; padding-bottom: 16px;
+    }
+    .students { display: flex; padding-left: 20px;}
+    ul.trailContainer {
+        display: flex;
+        width: 100px;
+        .name { width: 100%; background-color: #2FABEE;color: #FFF;}
+        li { padding-right: 16px;}
+    }
+    ul.trailItem {
+        li { width: 100px; height: 32px; margin-top: 3px;background-color: #FFF;border: 1px solid #DDD}
+    }
+    .trailtd {
+        display: flex;justify-content: space-between;
+        &.hide { opacity: .3}
+        .ant-tag {display: inline-block; text-align: center}
+        .no { width: 4em}
+        .sp {width: 6em;}
+    }
+}

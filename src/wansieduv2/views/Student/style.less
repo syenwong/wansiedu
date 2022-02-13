@@ -1,0 +1,103 @@
+.g-studentHomework {
+    .link { color: #0F6DC3; cursor: pointer}
+}
+.g-hwcontent {
+    width: 100%; padding: 20px; border-top: 3px solid #00A4FF;
+    background-color: #FFF;
+}
+/*
+作业弹窗
+*/
+.g-exerciseDoing {
+    padding-top: 1px;
+}
+
+.g-exercisingSubjectContent {
+    .taskHeader {
+        display: flex;justify-content: center; align-items: center;
+        flex-direction: column;
+        margin-bottom: 8px;border-bottom: 1px solid #DDD;
+        h2 {
+            display: flex;justify-content: center; align-items: center;
+            width: 100%; padding: 16px 8px; margin: 0; box-sizing: border-box;font-size: 14px;
+        }
+    }
+}
+
+.g-exerciseSwiper {
+    position: relative;
+    width: calc(100% - 240px);padding: 8px;border: 1px solid #DDD;
+    .swiper-container {
+        width: 100%;overflow: hidden;margin: 0;
+    }
+    
+    .subjectItem {
+        width: 100%; margin: 0 auto;
+        .subjectImg {
+            display: flex;justify-content: center;align-items: center;
+            width: 100%; margin: 0; background-color: #000;
+            .ant-image {
+                display: flex;justify-content: center;align-items: center;
+                width: 100%; height: 100%;}
+            img.ant-image-img {
+                display: block;
+                width: auto !important;
+                height: auto !important;
+                max-width: 100%;
+                max-height: 100%;}
+        }
+        .des {
+            height: 6em; margin-top: 16px;
+            background-color: #F2F2F2;padding: 6px;
+            font-size: 14px; line-height: 1.5em}
+    }
+}
+.g-exercisingControl {
+    flex-grow: 0;flex-shrink: 0;
+    display: flex;flex-direction: column;
+    width: 228px; padding: 16px 8px 8px; box-sizing: border-box;border: 1px solid #DDD;
+    .timerDashboard {
+        display: flex;justify-content: center;align-items: center;
+        width: 100%; height: 60px; font-size: 28px;
+        border: 1px solid #DDD;
+        user-select: none;
+        .isVisible {
+            font-size: 28px;
+            flex-grow: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .visibleControl {
+            font-size: 18px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 0;
+            flex-shrink: 0;}
+    }
+}
+
+.subjectControl {
+    display: flex; justify-content: space-between; align-items: center;
+    .btn {
+        display: flex;justify-content: space-between;align-items: center;
+        width: 49%; overflow: hidden;
+        font-size: 20px; color: #FFF;
+        user-select: none; cursor: pointer;
+    }
+    .currentSubjectNumber {
+        display: flex;justify-content: center;
+        width: 33%; height: 125px; border-radius: 3px; background-color: #00A4FF; color: #FFF; font-size: 45px; line-height: 112px;
+    }
+}
+
+.g-TableTaskSearch {
+    position: absolute; top: 16px;right: 16px;z-index: 999;
+    width: 400px;margin-bottom: 8px;
+}
+.g-studentHomeWork {
+    padding: 16px 16px;
+}
