@@ -1,0 +1,48 @@
+{
+  "code": 1000000,
+  "message": "success",
+  "data":{
+    "citySpeedAvg": "256",
+    "localProvinceCityRank": "3",
+    "localProvinceCityNum": "12",
+    "citySpeedRank": [
+      {
+        "cityName": "杭州",
+        "ranking": "1",
+        "cityAvgSpeed": "555"
+      },
+      {
+        "cityName": "宁波",
+        "ranking": "2",
+        "cityAvgSpeed": "552"
+      },
+      {
+        "cityName": "绍兴",
+        "ranking": "3",
+        "cityAvgSpeed": "434"
+      },
+      {
+        "cityName": "温州",
+        "ranking": "4",
+        "cityAvgSpeed": "232"
+      },
+      {
+        "cityName": "湖州",
+        "ranking": "5",
+        "cityAvgSpeed": "211"
+      },
+      {
+        "cityName": "金华",
+        "ranking": "6",
+        "cityAvgSpeed": "122"
+      },
+      {
+        "cityName": "衢州",
+        "ranking": "7",
+        "cityAvgSpeed": "111"
+      }
+    ]
+  }
+}
+
+

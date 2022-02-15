@@ -1,0 +1,117 @@
+
+.g-homeworklist {
+    .link { color: #0F6DC3; cursor: pointer }
+}
+.g-homeworkEditWrap {
+    .g-saveHomeWork {
+        position: fixed; bottom: 0;
+        width: 100%; height: 64px; background-color: #FFF; border-top: 2px solid #FB662D; box-shadow: 3px -3px 3px #DDD;
+        ul {
+            height: 64px; margin-bottom: 0;
+            display: flex;align-items: center; font-size: 16px;
+            li { display: flex; justify-content: center; align-items: center; height: 64px; width: 180px; border-left: 1px solid #DDD }
+            .icon { margin-left: 16px;}
+        }
+    }
+}
+
+.g-currentHomework {
+    display: flex; flex-direction: column;
+    align-items: stretch;
+    h2 { height: 36px; flex-grow: 0;flex-shrink: 0}
+    .currentContent {
+        flex-grow: 2;
+        display: flex;align-items: stretch;
+        width: 100%; border: 1px solid #DDD;
+        .studentContent {
+            flex-grow: 0;flex-shrink: 0;
+            width: 220px; padding: 15px; border-right: 1px solid #DDD;box-sizing: border-box;
+            overflow: auto;
+        }
+        .hkContent { flex-grow: 2;
+            overflow: auto;
+            .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+                padding: 8px 6px;
+            }
+        }
+    }
+}
+
+.homeworkDetail {
+    display: flex;justify-content: space-between; align-items: center;
+    width: 98%;
+}
+
+.g-homeworkeditcontent {
+    padding-bottom: 80px;
+    .content-step {
+        padding: 16px 32px;margin-bottom: 16px;
+        box-shadow: 0 0 5px #BBB;background-color: #FFF;
+    }
+}
+.g-homeworkcontentSteps {
+    .step {
+        &.n {display: none}
+    }
+}
+.g-homeworkinfo {
+    padding: 54px 48px; background-color: #FFF;
+    .whInfoForm {
+        width: 640px; margin: 0 auto 60px;
+    }
+    .u-formBtnWrap {
+        margin-top: 64px;
+    }
+    .ant-picker.ant-picker-range {width: 100%;}
+}
+
+.g-homeworkSelectStudent {
+    padding: 20px;
+    background-color: #FFF;
+}
+.g-homeworkcontentSteps {
+    .step {
+        &.n {display: none}
+    }
+}
+.g-homeworkinfo {
+    padding: 54px 48px; background-color: #FFF;
+    .whInfoForm {
+        width: 640px; margin: 0 auto 60px;
+    }
+    .u-formBtnWrap {
+        margin-top: 64px;
+    }
+    .ant-picker.ant-picker-range {width: 100%;}
+}
+
+.g-homeworkSelectStudent {
+    padding: 20px;
+    background-color: #FFF;
+    
+    .g-TableTransfer {
+    
+    }
+}
+
+.g-homeworkSelectExaPaper {
+    .selectedPaper {
+        display: flex; justify-content: space-between;
+        background: #FBF3EA;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #FFBA88;
+        .selectedPaper-current {
+            display: flex; justify-content: space-between; width: 100%;
+            p {font-size: 16px; margin-bottom: 0; color: #7F3618}
+        }
+    }
+}
+
+.g-homeworkStatusSwitch {
+    display: flex;align-items: center; margin: 0 0 16px;
+}
+.g-homeworkViewDoneSearch {
+    display: flex;justify-content: space-between;
+    padding: 16px; background-color: #FFF;
+}
