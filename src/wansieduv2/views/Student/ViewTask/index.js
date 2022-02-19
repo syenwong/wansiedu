@@ -17,7 +17,6 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 // 工具及存储
 import { EDU_CONTEXT } from '../../../store';
-import { serializeSubject } from '../../../service/utils';
 // 外部组件
 import { GlobalTop } from '../../../globalComponents/GlobalTop';
 // 内部组件
@@ -29,21 +28,27 @@ import { SubjectNav } from './components/SubjectNav';
 import { useStudentHandlers } from '../../../Controller/useStudentHandlers';
 import { Affix, Button, message } from 'antd';
 import { AddSignModal } from '../../../globalComponents/AddSignModal';
+import { MARK_PREFIX } from '../../../service/STATIC_DATA';
 
 
+const { anMark } = MARK_PREFIX;
 export function ViewTask (props) {
     const tid = props?.match?.params?.tid;
     const history = useHistory();
     const { state: { clientHeight, currentTaskExaPaper } } = useContext(EDU_CONTEXT);
     const { subjects = [], NoList = [] } = currentTaskExaPaper || {};
     const studentHandlers = useStudentHandlers();
+    const viewExaPaperHandler = async () => {
+        try {
+            await studentHandlers('viewExaPaper', tid);
+        } catch (e) {
+            message.error(e.message);
+        }
+        
+    };
     useEffect(() => {
         (async () => {
-            try {
-                await studentHandlers('viewExaPaper', tid);
-            } catch (e) {
-                message.error(e.message);
-            }
+            await viewExaPaperHandler();
         })();
     }, []);
     return <>
@@ -54,13 +59,13 @@ export function ViewTask (props) {
                 <SubjectNav subjectNoList={NoList} />
             </div>
             <div className={'layout-studentViewExamPaperWrap-content'} style={{ height: `${clientHeight - 54}px` }}>
-                <ViewExamPaperSubjects subjects={subjects} />
+                <ViewExamPaperSubjects stid={tid} subjects={subjects} />
             </div>
             <div className={'layout-studentViewExamPaperWrap-info'} style={{ height: `${clientHeight - 54}px` }}>
                 <Affix offsetTop={49}><ViewExamPaperInfo /></Affix>
                 <TypeDetailsMap />
             </div>
         </div>
-        <AddSignModal tid={tid} />
+        <AddSignModal type={anMark} callback={viewExaPaperHandler} />
     </>;
 }

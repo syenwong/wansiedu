@@ -73,7 +73,7 @@ export function TypeDetailsMap () {
                     <dd>
                         {
                             (t?.Nos ?? []).map((n, j) => {
-                                return <Tag>{n}</Tag>;
+                                return <Tag key={j}>{n}</Tag>;
                             })
                         }
                     </dd>

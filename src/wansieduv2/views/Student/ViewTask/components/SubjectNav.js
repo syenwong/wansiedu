@@ -13,7 +13,7 @@
  * @version */
 // eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react';
-import { findParentNode } from '@hjq/uts';
+import { findParentNode } from '../../../../service/utils';
 import { EDU_CONTEXT } from '../../../../store';
 
 export function SubjectNav (props) {

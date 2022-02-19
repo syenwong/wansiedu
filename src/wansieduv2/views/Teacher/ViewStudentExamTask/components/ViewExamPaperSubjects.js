@@ -17,7 +17,7 @@ import { SubjectItem } from './SubjectItem';
 import { EDU_CONTEXT } from '../../../../store';
 
 export function ViewExamPaperSubjects (props) {
-    const { subjects } = props;
+    const { stid, subjects } = props;
     const { state: { clientWidth } } = useContext(EDU_CONTEXT);
     const [imgSize] = useState((clientWidth - 32) * .64 - 42 - 48);
     return <>
@@ -25,40 +25,13 @@ export function ViewExamPaperSubjects (props) {
             subjects.length > 0 ?
                 <ul className={'g-subjects'}>
                     {subjects.map((s, i) => {
-                        const No = (s?.No ?? '').replace(/\./ig, '_');
-                        return <li data-isroot={1} id={`subjectItem_id_${No}`} key={i} className={'mainSubject'}>
+                        s = Object.assign(s, { sTid: stid });
+                        const no = (String(s?.no ?? '')).replace(/\./ig, '_');
+                        return <li data-isroot={1} id={`subjectItem_id_${no}`} key={i} className={'mainSubject'}>
                             <div className={'subjectLabel'}>
-                                <span className={'No'}>{i + 1}</span>
+                                <span className={'No'}>{s.no}</span>
                             </div>
-                            {
-                                s.isParent ?
-                                    <>
-                                        
-                                        {
-                                            s.remark &&
-                                            <div className={'mainSubject_content'}>
-                                                {s.remark && <div className={'subjectRemark'}>
-                                                    {s.remark}
-                                                </div>}
-                                            </div>
-                                        }
-                                        {
-                                            Array.isArray(s.children) && s.children.length > 0 ?
-                                                <ul className={'subSubject'}>
-                                                    {
-                                                        s.children.map((ss, j) => {
-                                                            const _No = (ss?.No ?? '').replace(/\./ig, '_');
-                                                            console.log(ss);
-                                                            return <li data-isroot={0} id={`subjectItem_id_${_No}`} key={j}>
-                                                                <SubjectItem imgSize={imgSize} subject={ss} />
-                                                            </li>;
-                                                        })
-                                                    }
-                                                </ul> : '无小题'
-                                        }
-                                    </> :
-                                    <SubjectItem imgSize={imgSize} subject={s} />
-                            }
+                            <SubjectItem imgSize={imgSize} subject={s} />
                         </li>;
                     })}
                 </ul> :

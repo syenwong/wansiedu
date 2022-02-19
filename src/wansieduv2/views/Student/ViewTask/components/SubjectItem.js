@@ -66,7 +66,7 @@ export function SubjectItem (props) {
             const hu = Math.max(...h);
             setContainerMax(hu);
         });
-    }, []);
+    }, [subject]);
     return <div className={'m-subjectItem-studentView'}>
         {
             hasParent &&
@@ -82,11 +82,10 @@ export function SubjectItem (props) {
             </div>
             <div className={'operate'}>
                 <Button size={'small'} type={'primary'} onClick={() => {
-                    console.log(subject);
                     dispatch({
                         addSubjectSignModalData: subject
                     });
-                }}>题目标记</Button>
+                }}>我还想再改改...</Button>
             </div>
         </div>
         {remark && <div className={'subjectRemark'}>

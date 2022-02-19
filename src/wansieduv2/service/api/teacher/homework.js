@@ -87,9 +87,16 @@ export async function updateTaskStatusApi (a, tid) {
 }
 // /teacher/updateTaskStatus
 // 批改作业
-export async function checkAnswerApi (sTid, subjectId, score, file) {
+export async function checkAnswerApi ({ sTid, subjectId, score, url, file }) {
     try {
-        return await Ax.post(`/teacher/checkAnswer`, { sTid, subjectId, score }, {
+        const params = { sTid, subjectId };
+        if (url) {
+            params.url = url;
+        }
+        if (score) {
+            params.score = score;
+        }
+        return await Ax.post(`/teacher/checkAnswer`, params, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },

@@ -17,7 +17,7 @@ import { SubjectItem } from './SubjectItem';
 import { EDU_CONTEXT } from '../../../../store';
 
 export function ViewExamPaperSubjects (props) {
-    const { subjects } = props;
+    const { stid, subjects } = props;
     const { state: { clientWidth } } = useContext(EDU_CONTEXT);
     const [imgSize] = useState((clientWidth - 32) * .64 - 42 - 48);
     return <>
@@ -25,6 +25,7 @@ export function ViewExamPaperSubjects (props) {
             subjects.length > 0 ?
                 <ul className={'g-subjects'}>
                     {subjects.map((s, i) => {
+                        s = Object.assign(s, { sTid: stid });
                         const No = (s?.No ?? '').replace(/\./ig, '_');
                         return <li data-isroot={1} id={`subjectItem_id_${No}`} key={i} className={'mainSubject'}>
                             <div className={'subjectLabel'}>
@@ -47,6 +48,7 @@ export function ViewExamPaperSubjects (props) {
                                                 <ul className={'subSubject'}>
                                                     {
                                                         s.subSubjects.map((ss, j) => {
+                                                            ss = Object.assign(ss, { sTid: stid });
                                                             const _No = (ss?.No ?? '').replace(/\./ig, '_');
                                                             return <li data-isroot={0} id={`subjectItem_id_${_No}`} key={j}><SubjectItem imgSize={imgSize} subject={ss} /></li>;
                                                         })

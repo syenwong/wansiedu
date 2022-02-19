@@ -21,7 +21,7 @@ import { useHistory } from 'react-router-dom';
 import { CanvasCom } from '../../../globalComponents/CanvasCom/CanvasCom';
 import { FileDoneOutlined, StepForwardOutlined, StepBackwardOutlined, LeftOutlined } from '@ant-design/icons';
 import { startTaskApi, getSubjectlistApi, addSpendApi, addAnswerApi, doneTaskApi } from '../../../service/api/student';
-import { findParentNode } from '@hjq/uts';
+import { findParentNode } from '../../../service/utils';
 import { delayeringSubject, launchIntoFullscreen, launchExitFullscreen, resolveSubjectUrl } from '../../../service/utils';
 import { TimeReader } from './TimeReader';
 import { useModalError } from '../../../Controller/useModalError';
@@ -79,7 +79,7 @@ export function DoingTask () {
             const spendTime = timerRsf.current.submitSpendTime();
             const _remainTime = await addSpendApi(sTid, subjectId, spendTime * 1000);
             // 提交答案
-            const { formData } = await canvasRef.current.submitAnswer(sTid, subjectId);
+            const { formData } = await canvasRef.current.submitDrawImage(sTid, subjectId);
             await addAnswerApi({ sTid, subjectId, file: formData });
             return _remainTime;
         } catch (e) {
@@ -290,7 +290,7 @@ export function DoingTask () {
                                id={'paper'}
                                offsetLeft={0}
                                drClear={false}
-                               isTeacher={false}
+                               penColor={0}
                                offsetTop={canvasOffseTop}
                                canvasHeight={canvasHeight}
                                canvasWidth={canvasWidth}
@@ -300,7 +300,7 @@ export function DoingTask () {
                 </div>
                 <div className={'exercising_draft'}>
                     <CanvasCom id={'draft'}
-                               isTeacher={false}
+                               penColor={0}
                                offsetLeft={canvasDrOffsetLeft}
                                offsetTop={canvasOffseTop}
                                canvasWidth={canvasDrWidth}

@@ -129,7 +129,7 @@ export function HomeWorkList () {
                             history.push('/teacher/homework_edit');
                         } catch (e) {
                         }
-                    }}>重新编辑发布</Button></div>;
+                    }}>修改作业</Button></div>;
             }
         }
     ];

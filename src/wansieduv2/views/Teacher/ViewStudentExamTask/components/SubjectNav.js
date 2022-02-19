@@ -13,7 +13,7 @@
  * @version */
 // eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react';
-import { findParentNode } from '@hjq/uts';
+import { findParentNode } from '../../../../service/utils';
 import { EDU_CONTEXT } from '../../../../store';
 
 export function SubjectNav (props) {
@@ -32,10 +32,11 @@ export function SubjectNav (props) {
                 const p = findParentNode($self.parentNode, 'li');
                 top = $self.offsetTop + p.offsetTop;
             }
-            window.scrollTo(0, top - 32);
+            document.querySelector('.layout-studentViewExamPaperWrap-content').scrollTo(0, top - 32);
         }
     };
-    return <ul className={'g-subjectNav'} style={{ height: `${clientHeight - 130}px` }} onClick={switchSubjectNo}>
+    
+    return <ul className={'g-subjectNav'} style={{ height: `${clientHeight - 140}px` }} onClick={switchSubjectNo}>
         {subjectNoList.map((subjectNo, i) => {
             const {
                 Noo,

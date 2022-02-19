@@ -150,7 +150,7 @@ export function HomeWork () {
                             history.push('/teacher/homework_edit');
                         } catch (e) {
                         }
-                    }}>重新编辑发布</Button>
+                    }}>修改作业</Button>
                     <Button type={'primary'} danger size={'middle'} onClick={() => delTask(c)}>删除作业</Button>
                 </div>;
             }

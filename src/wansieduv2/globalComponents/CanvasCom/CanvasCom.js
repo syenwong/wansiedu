@@ -19,8 +19,7 @@ import { Draw } from './Draw';
 import { ShakeOutlined, FlagOutlined, DeleteOutlined, StopOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 
-
-const penColors = ['#000000', '#E50000', '#0091CE', '#ff6803'];
+const penColors = ['#333', '#E50000', '#0091CE', '#ff6803'];
 function dataURLtoFile (dataurl, filename) {//将base64转换为文件，dataurl为base64字符串，filename为文件名（必须带后缀名，如.jpg,.png）
     let binary = atob(dataurl.split(',')[1]);
     let mime = dataurl.split(',')[0].match(/:(.*?);/)[1];
@@ -37,7 +36,7 @@ export function CanvasCom (props) {
     const {
         cRef, id = '0',
         offsetLeft = 0, offsetTop = 0, canvasWidth, canvasHeight = '100%',
-        isTeacher = true, setFlag, drClear = true, background = 'transparent',
+        penColor = 1, setFlag, drClear = true, background = 'transparent',
         questionImages = [], imageDrawed = [], drawImageSrc = ''
     } = props;
     const [draw, setDraw] = useState(null);
@@ -70,7 +69,7 @@ export function CanvasCom (props) {
     };
     useImperativeHandle(cRef, () => ({
         // changeVal 就是暴露给父组件的方法
-        submitAnswer: (sTid, subjectId, prefix = 'answer') => {
+        submitDrawImage: (sTid, subjectId, prefix = 'answer') => {
             return new Promise((resolve) => {
                 const imgDataOr = draw.ctx.getImageData(0, 0, draw.width, draw.height);
                 const imgData = imgDataOr.data;
@@ -122,8 +121,6 @@ export function CanvasCom (props) {
         setFlag(c);
         setFlagVisible(false);
     };
-    
-    
     useEffect(() => {
         const _$er = document.querySelector(`#ER_${id}`);
         const _$canvasWrap = document.querySelector(`#canvasWrap_${id}`);
@@ -132,7 +129,7 @@ export function CanvasCom (props) {
             offsetTop: offsetTop,
             offsetWidth: canvasWidth,
             offsetHeight: canvasHeight,
-            defaultColor: penColors[Number(isTeacher)],
+            defaultColor: penColors[Number(penColor)],
             colors: penColors
         });
         setDraw($d);

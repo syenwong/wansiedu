@@ -11,9 +11,10 @@
  * @author wangshuyan@cmhi.chinamobile.com
  * @date 2021/8/17
  * @version */
-import { GRADE_ORDER } from './STATIC_DATA';
+import { GRADE_ORDER, MARK_PREFIX } from './STATIC_DATA';
 import moment from 'moment';
 
+const { anMark, ckMark } = MARK_PREFIX;
 const now = new Date();
 const month = now.getMonth();
 const year = now.getFullYear();
@@ -50,9 +51,7 @@ export function formatDateHw (t, f = 'YYYY-MM-DD HH:mm') {
     let _t = t.replace(/-/ig, '/');
     return moment(new Date(_t)).format(f);
 }
-export function getTimeForSt (st) {
-    return new Date(st.replace(/-/ig, '/')).getTime();
-}
+
 export function serializeSubject (data, key) {
     let subjects = [];
     const resultData = data.filter(s => {
@@ -108,21 +107,19 @@ export const resolveSubjectUrl = (subjects, subjectIdKey = 'id') => {
         // answerUrl
         let answerUrlAr = (answerUrl || '').split(',');
         for (const an_url of answerUrlAr) {
-            if (an_url.includes(`answer_`)) {
-                answer_img = an_url;
-            }
-            if (an_url.includes(`anMark_`)) {
+            if (an_url.includes(`${anMark}_`)) {
                 anMark_img = an_url;
+            } else {
+                answer_img = an_url;
             }
         }
         //checkUrl
         let checkUrlAr = (checkUrl || '').split(',');
         for (const ck_url of checkUrlAr) {
-            if (ck_url.includes(`answer_`)) {
-                check_img = ck_url;
-            }
-            if (ck_url.includes(`anMark_`)) {
+            if (ck_url.includes(`${ckMark}_`)) {
                 ckMark_img = ck_url;
+            } else {
+                check_img = ck_url;
             }
         }
         Object.assign(sa, { answer_img, anMark_img, check_img, ckMark_img });
@@ -207,3 +204,16 @@ export function launchExitFullscreen () {
     }
 }
 
+export function findParentNode (_t, nodename, dataType) {
+    var c1 = _t.nodeType === 1,
+        c2 = _t.nodeName.toLowerCase() === nodename,
+        c3 = c1 && c2 && (dataType ? _t.dataset[dataType] === '1' : true);
+    
+    if (c3) {
+        return _t;
+    } else if (_t.nodeType === 9) {
+        return null;
+    } else {
+        return findParentNode(_t.parentNode, nodename, dataType);
+    }
+}

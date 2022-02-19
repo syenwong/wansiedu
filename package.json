@@ -15,11 +15,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "@hjq/openHjqUrl": "^1.0.3",
-    "@hjq/trace": "^1.4.14",
-    "@hjq/uniappbridge": "^1.4.1",
-    "@hjq/uts": "^1.4.6",
-    "@rematch/core": "^1.4.0",
     "antd": "^4.3.5",
     "antd-mobile": "^2.3.4",
     "crypto-js": "^4.1.1",

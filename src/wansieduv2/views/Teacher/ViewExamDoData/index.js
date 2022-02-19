@@ -177,7 +177,6 @@ export function ViewExamDoData (props) {
                     const { spendTime, score, checkScore } = t;
                     return <div className={'detail'} onClick={() => {
                         setViewAnswerVisible(true);
-                        console.log(t);
                         setViewAnswerContent(t);
                     }}>
                         <Tag color={'blue'}>{smTr(spendTime)}</Tag><Tag color={'green'}>{checkScore}</Tag>

@@ -15,13 +15,14 @@ import './style.less';
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Modal, Tag, Tooltip, Table, Radio, Input, Affix } from 'antd';
-import { getStudentGrade, formatDateHw, smTr, delayeringSubject } from '../../../service/utils';
+import { getStudentGrade, formatDateHw, smTr, delayeringSubject, resolveSubjectUrl } from '../../../service/utils';
 import { useHistory } from 'react-router-dom';
 import { downStudentTimeApi, listStudentTimeApi, updateTaskStatusApi } from '../../../service/api/teacher/homework';
-import { GRADE_MAP, HOMEWORK_STATUS_MAP } from '../../../service/STATIC_DATA';
+import { GRADE_MAP, HOMEWORK_STATUS_MAP, MARK_PREFIX } from '../../../service/STATIC_DATA';
 import { EDU_CONTEXT } from '../../../store';
-import { DoDataViewAnswer } from '../../../globalComponents/DoDataViewAnswer/';
+import { AddSignModal } from '../../../globalComponents/AddSignModal';
 
+const { ckMark } = MARK_PREFIX;
 const { Search } = Input;
 export function ViewHomework () {
     const { state: { currentHomeWorkData, account, clientHeight }, dispatch } = useContext(EDU_CONTEXT);
@@ -42,8 +43,6 @@ export function ViewHomework () {
     const [allNames, setAllNames] = useState([]);
     const [subjectsNo, setAllSubjectsNo] = useState([]);
     const [allTypes, setAllTypes] = useState([]);
-    const [viewAnswerVisible, setViewAnswerVisible] = useState(false);
-    const [viewAnswerContent, setViewAnswerContent] = useState(null);
     const [loading, setLoading] = useState(false);
     const [filterType, setFilterType] = useState('checkScore');
     /*
@@ -98,7 +97,8 @@ export function ViewHomework () {
             setLoading(true);
             const _listStudentTime = await listStudentTimeApi(tid);
             for (const listStudentTimeElement of _listStudentTime) {
-                listStudentTimeElement.subjectTimeAndAnswersList = delayeringSubject(listStudentTimeElement.subjectTimeAndAnswers, tid, 'subjectId');
+                const subjectTimeAndAnswers = resolveSubjectUrl(listStudentTimeElement.subjectTimeAndAnswers);
+                listStudentTimeElement.subjectTimeAndAnswersList = delayeringSubject(subjectTimeAndAnswers, tid, 'subjectId');
             }
             const __listStudentTime = {
                 all: [],
@@ -115,23 +115,36 @@ export function ViewHomework () {
                 listStudentTimeElement.totalTime = 0;
                 listStudentTimeElement.checkScoreTotal = 0;
                 listStudentTimeElement.scoreTotal = 0;
+                listStudentTimeElement.subjects = [];
+                listStudentTimeElement.types_Maps = [];
+                listStudentTimeElement.NoList = [];
                 _AllNames.push({
                     text: listStudentTimeElement.name,
                     value: listStudentTimeElement.name
                 });
                 for (const subjectTimeAndAnswersListElement of subjectTimeAndAnswersList) {
-                    const { no, spendTime, checkScore, score } = subjectTimeAndAnswersListElement;
+                    const { no, spendTime, checkScore, score, answer_img } = subjectTimeAndAnswersListElement;
                     _AllSubjectsNo[no] = { no, score };
+                    listStudentTimeElement.subjects.push(subjectTimeAndAnswersListElement);
                     listStudentTimeElement[`no_${no}`] = subjectTimeAndAnswersListElement;
                     listStudentTimeElement.totalTime += spendTime;
                     listStudentTimeElement.checkScoreTotal += (checkScore === -1 ? 0 : checkScore);
                     listStudentTimeElement.scoreTotal += score;
+                    listStudentTimeElement.NoList.push({
+                        Noo: no,
+                        No: String(no).replaceAll('.', '_'),
+                        hasAnswer: Boolean(answer_img),
+                        hasChecked: checkScore > -1,
+                        hasError: checkScore < score
+                    });
                 }
                 Object.assign(_AllTypes, typeDetailsMap);
                 for (const typeDetailsMapElement of Object.values(typeDetailsMap)) {
                     const { type, time, score, checkScore } = typeDetailsMapElement;
                     const ratio = checkScore > -1 ? (checkScore / (time / 60000)).toFixed(2) : 'NA';
-                    listStudentTimeElement[`type_${type}`] = { time, score, checkScore, ratio };
+                    const typeItem = { time, score, checkScore, ratio };
+                    listStudentTimeElement[`type_${type}`] = typeItem;
+                    listStudentTimeElement.types_Maps.push(typeItem);
                 }
                 __listStudentTime[status].push(listStudentTimeElement);
                 __listStudentTime.all.push(listStudentTimeElement);
@@ -157,7 +170,7 @@ export function ViewHomework () {
             async onOk () {
                 try {
                     await updateTaskStatusApi(a, tid);
-                    getAllStudentTimeList();
+                    await getAllStudentTimeList();
                 } catch (e) {
                     Modal.error({ title: e.message });
                 }
@@ -171,8 +184,6 @@ export function ViewHomework () {
             align: 'center',
             width: 66,
             filters: allNames,
-            // specify the condition of filtering result
-            // here is that finding the name started with `value`
             onFilter: (value, record) => record.name.indexOf(value) === 0,
             render (t, a) {
                 const labelsAr = ((a?.labels ?? '').replace(account, '').split(',')).filter(l => {
@@ -181,9 +192,7 @@ export function ViewHomework () {
                 const grade = GRADE_MAP[getStudentGrade(a.startTime)];
                 const labels = '(' + grade + '):' + labelsAr.join(',');
                 return <Tooltip placement="top" title={labels} onClick={() => {
-                    dispatch({
-                        ViewStudentExamTask: a
-                    });
+                    dispatch({ ViewStudentExamTask: a });
                     history.push('/teacher/ViewStudentExamTask');
                 }}>{t}</Tooltip>;
             },
@@ -199,11 +208,13 @@ export function ViewHomework () {
                     const _filterType = filterType === 'time' ? 'spendTime' : (filterType === 'ratio' ? 'checkScore' : filterType);
                     return a[`no_${no}`]?.[_filterType] - b[`no_${no}`]?.[_filterType];
                 },
-                render (t) {
+                render (t, a) {
                     const { spendTime, checkScore } = t;
+                    const { stid } = a;
                     return <div className={'detail'} onClick={() => {
-                        setViewAnswerVisible(true);
-                        setViewAnswerContent(Object.assign({}, t, { no }));
+                        dispatch({
+                            addSubjectSignModalData: Object.assign({}, t, { no, sTid: stid })
+                        });
                     }}>
                         <Tag color={'blue'}>{smTr(spendTime)}</Tag><Tag color={'green'}>{checkScore}</Tag>
                     </div>;
@@ -225,7 +236,7 @@ export function ViewHomework () {
                 sorter: (a, b) => {
                     return a[`type_${type}`]?.[filterType] - b[`type_${type}`]?.[filterType];
                 },
-                render (t, a, i) {
+                render (t) {
                     const { time, checkScore, ratio } = t;
                     return <>
                         <Tag color={'volcano'}>{smTr(time)}</Tag>
@@ -282,7 +293,9 @@ export function ViewHomework () {
     ];
     useEffect(() => {
         if (tid) {
-            getAllStudentTimeList();
+            (async () => {
+                await getAllStudentTimeList();
+            })();
         } else {
             history.push('/teacher/homework');
         }
@@ -332,14 +345,6 @@ export function ViewHomework () {
                loading={loading}
                scroll={{ x: plazNum + 6 * 66, y: clientHeight - 185 }}
                pagination={false} />
-        <Modal maskClosable={false}
-               title={<div>{ename}-{tname}</div>}
-               width={'auto'}
-               closable={true}
-               footer={null}
-               onCancel={() => setViewAnswerVisible(false)}
-               visible={viewAnswerVisible}>
-            <DoDataViewAnswer modalHeight={clientHeight - 200} viewAnswerContent={viewAnswerContent} />
-        </Modal>
+        <AddSignModal type={ckMark} callback={getAllStudentTimeList} />
     </div>;
 }

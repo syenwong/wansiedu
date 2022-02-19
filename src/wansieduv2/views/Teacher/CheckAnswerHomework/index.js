@@ -112,9 +112,9 @@ export function CheckAnswerHomework () {
             setSpinning(true);
             const sTid = data?.[currentStudent?.id]?.stid;
             const subjectId = currentSubject.id;
-            const { formData } = await childRef.current.submitAnswer(sTid, subjectId, 'check');
+            const { formData } = await childRef.current.submitDrawImage(sTid, subjectId, 'check');
             const score = editSubjectForm.getFieldValue('score');
-            await checkAnswerApi(sTid, subjectId, score, formData);
+            await checkAnswerApi({ sTid, subjectId, score, file: formData, url: currentSubjectAn.ckMark_img});
             await getDatas();
             setSpinning(false);
             return true;
@@ -260,14 +260,15 @@ export function CheckAnswerHomework () {
     }, [switchStudentIndex, switchSubjectIndex]);
     useEffect(() => {
         dispatch({ currentTeacherNavKey: 'homework' });
-        if (eid) {
-            Promise.all([getDatas(), getSubjectList()]).then(([studentList, subjectsKeys]) => {
+        (async () => {
+            if (eid) {
+                await Promise.all([getDatas(), getSubjectList()]);
                 setSwitchStudentIndex(0);
                 setSwitchSubjectIndex(0);
-            });
-        } else {
-            history.push('/teacher/homework');
-        }
+            } else {
+                history.push('/teacher/homework');
+            }
+        })();
     }, []);
     return <div className={'g-checkAnswerHomework'}>
         <div className={'g-chAnHeader'}>

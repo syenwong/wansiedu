@@ -12,10 +12,10 @@
  * @date 2021/12/12
  * @version */
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Tag } from 'antd';
 import { smTr } from '../../../../service/utils';
-import { AddSignModal } from '../../../../globalComponents/AddSignModal';
+import { EDU_CONTEXT } from '../../../../store';
 
 function getImgHeight (url, imgSize) {
     return new Promise(resolve => {
@@ -33,32 +33,42 @@ function getImgHeight (url, imgSize) {
         }
     });
 }
+function RenderImgUrl (props) {
+    const { ImgUrl, figureStyle, zIndex = 0 } = props;
+    return <figure className={figureStyle}>
+        {ImgUrl.map((img, index) => {
+            return (img.includes('noMatchingUrl')) ? null : <img style={{ zIndex: zIndex + index }} key={index} src={img} alt="" />;
+        })}
+    </figure>;
+}
+
+
 export function SubjectItem (props) {
+    const { dispatch } = useContext(EDU_CONTEXT);
     const { subject, imgSize } = props;
-    const { score, checkUrl, checkScore, remark, type, id, url, answerUrl, parentUrl, parentId, No, time } = subject;
+    const { No, score, checkScore, remark, type, parentId, time, url, answer_img, anMark_img, ckMark_img, check_img } = subject;
     const [hasParent] = useState(Number(parentId) !== 0);
     const [containerMax, setContainerMax] = useState(0);
-    const [addSignModalVisible, setaddSignModalVisible] = useState(false);
     const typeTr = typeof type === 'string' && type !== '' ? type.split(',') : ((Array.isArray(type) && type.length > 0) ? type : []);
     useEffect(() => {
-        const proAll = [getImgHeight(answerUrl, imgSize), getImgHeight(checkUrl, imgSize), getImgHeight(url, imgSize)];
-        if (parentUrl) {
-            proAll.push(getImgHeight(parentUrl, imgSize * .85));
-        }
-        Promise.all(proAll).then(h => {
-            const [h1, h2, ...h3] = h;
-            const hu = h3.reduce((t, n) => {
+        const proAll = [answer_img, check_img, anMark_img, ckMark_img].map(imgUrl => {
+            return getImgHeight(imgUrl, imgSize);
+        });
+        const proUrl = (async () => {
+            const allH = await Promise.all(url.map(async (u) => {
+                return await getImgHeight(u, imgSize);
+            }));
+            return allH.reduce((t, n) => {
                 return t + n;
             }, 0);
-            setContainerMax(Math.max(h1, h2, hu));
+        })();
+        Promise.all([...proAll, proUrl]).then(h => {
+            const hu = Math.max(...h);
+            setContainerMax(hu);
         });
-    }, []);
+    }, [subject]);
     return <div className={'m-subjectItem-studentView'}>
-        {
-            hasParent &&
-            <span className={'subSubjectNo'}>{No}</span>
-        }
-        <div className={`subjectInfo ${hasParent ? 'pl' : 'nr'}`}>
+        <div className={`subjectInfo nr`}>
             <div className={'score'}>
                 <Tag color="green">{Number(checkScore) === -1 ? '未批改' : checkScore}/{score}分</Tag>
                 <Tag color={'orange'}>{smTr(time)}</Tag>
@@ -68,23 +78,18 @@ export function SubjectItem (props) {
             </div>
             <div className={'operate'}>
                 <Button size={'small'} type={'primary'} onClick={() => {
-                    setaddSignModalVisible(true);
-                }}>修改</Button>
+                    dispatch({
+                        addSubjectSignModalData: subject
+                    });
+                }}>我还想再改改...</Button>
             </div>
         </div>
         {remark && <div className={'subjectRemark'}>
             {remark}
         </div>}
         <div className={'answerImgsContainer'} style={{ height: containerMax + 'px' }}>
-            <div className={`questionUrls ${answerUrl ? 'nor' : 'visible'}`}>
-                {parentUrl && <img src={parentUrl} alt="" />}
-                {url && <img src={url} alt="" />}
-            </div>
-            {answerUrl && <img className={'answerUrl'} src={answerUrl} alt="" />}
-            {checkUrl && <img className={'checkUrl'} src={checkUrl} alt="" />}
+            <RenderImgUrl ImgUrl={url} figureStyle={'questionUrls'} />
+            <RenderImgUrl ImgUrl={[answer_img, check_img, anMark_img, ckMark_img]} figureStyle={'drawedImage'} zIndex={84} />
         </div>
-        <AddSignModal addSignModalVisible={addSignModalVisible} modalInfo={{}} swichModalVisible={() => {
-            setaddSignModalVisible(false);
-        }} />
     </div>;
 }

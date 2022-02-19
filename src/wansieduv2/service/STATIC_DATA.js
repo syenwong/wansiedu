@@ -60,3 +60,8 @@ export const DEFAULT_SUBJECT = {
     parentId: 0,
     isParent: false
 };
+
+export const MARK_PREFIX = {
+    anMark: 'anMark',
+    ckMark: 'ckMark'
+};

@@ -56,7 +56,7 @@ export function useStudentHandlers () {
                 
                 const NoList = [];
                 for (const subject of _subjects) {
-                    const { isParent, No, checkScore, score, type, subSubjects, answer_img, check_img, anMark_img, ckMark_img, url, parentUrl } = subject;
+                    const { isParent, No, checkScore, score, type, subSubjects, answer_img, url, parentUrl } = subject;
                     if (isParent === 1 && Array.isArray(subSubjects) && subSubjects.length > 0) {
                         for (const subSubject of subSubjects) {
                             const {
@@ -65,9 +65,6 @@ export function useStudentHandlers () {
                                 checkScore: _sCheckScore,
                                 score: _sScore,
                                 answer_img: _sAnswerImg,
-                                check_img: _sCheckImg,
-                                anMark_img: _sAnMark,
-                                ckMark_img: _sCkMark,
                                 url: _sUrl,
                                 parentUrl
                             } = subSubject;
@@ -115,7 +112,7 @@ export function useStudentHandlers () {
                         // 图片整理
                         subject.url = [url];
                         if (parentUrl) {
-                            subSubject.url.unshift(parentUrl);
+                            subject.url.unshift(parentUrl);
                         }
                     }
                 }
@@ -138,12 +135,6 @@ export function useStudentHandlers () {
             } catch (e) {
                 console.log(e);
             }
-        },
-        async resetStudentTaskPaper () {
-            dispatch({
-                currentTask: null,
-                currentTaskExaPaper: null
-            });
         }
     };
     return async function (type, c, params) {

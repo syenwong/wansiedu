@@ -13,36 +13,61 @@
  * @version */
 import './style.less';
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect, useState } from 'react';
-import { Affix } from 'antd';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+// 工具及存储
+import { EDU_CONTEXT } from '../../../store';
+// 外部组件
+import { GlobalTop } from '../../../globalComponents/GlobalTop';
+// 内部组件
 import { ViewExamPaperInfo } from './components/ViewExamPaperInfo';
 import { ViewExamPaperSubjects } from './components/ViewExamPaperSubjects';
 import { TypeDetailsMap } from './components/TypeDetailsMap';
 import { SubjectNav } from './components/SubjectNav';
-import { useHistory } from 'react-router-dom';
-import { EDU_CONTEXT } from '../../../store';
+// 逻辑
+import { useStudentHandlers } from '../../../Controller/useStudentHandlers';
+import { Affix, Button, message } from 'antd';
+import { AddSignModal } from '../../../globalComponents/AddSignModal';
+import { MARK_PREFIX } from '../../../service/STATIC_DATA';
 
+
+const { anMark } = MARK_PREFIX;
 export function ViewStudentExamTask (props) {
-    const tid = props?.match?.params?.tid;
     const history = useHistory();
-    const { state: { ViewStudentExamTask } } = useContext(EDU_CONTEXT);
-    const [subjects, setSubjects] = useState([]);
-    const [subjectNoList, setSubjectNoList] = useState([]);
-    useEffect(() => {
-        if (!ViewStudentExamTask) {
-            history.push('/Teacher/homework');
-            return;
+    const { state: { clientHeight, currentTaskExaPaper, ViewStudentExamTask } } = useContext(EDU_CONTEXT);
+    
+    
+    const { subjects = [], NoList = [] } = ViewStudentExamTask || {};
+    
+    const studentHandlers = useStudentHandlers();
+    const viewExaPaperHandler = async () => {
+        try {
+            await studentHandlers('viewExaPaper', tid);
+        } catch (e) {
+            message.error(e.message);
         }
-        setSubjects(ViewStudentExamTask.subjectTimeAndAnswers);
-    }, []);
+        
+    };
+    useEffect(() => {
+        console.log(ViewStudentExamTask);
+        if (ViewStudentExamTask) {
+        
+        }
+    }, [ViewStudentExamTask]);
     return <>
-        <div className={'g-TeacherViewExamPaperWrap'}>
-            <Affix style={{ position: 'relative', zIndex: 99 }}><ViewExamPaperInfo /></Affix>
-            <div className={'g-viewExamPaperSubjectsList'}>
-                <Affix offsetTop={42} style={{ width: '10%' }}><SubjectNav subjectNoList={subjectNoList} /></Affix>
-                <ViewExamPaperSubjects subjects={subjects} />
-                <Affix offsetTop={42} style={{ width: '24%' }}><TypeDetailsMap /></Affix>
+        <div className={'g-studentViewExamPaperWrap'}>
+            <div className={'layout-studentViewExamPaperWrap-nav'}>
+                <Button type={'primary'} onClick={() => window.history.go(-1)}> 返回作业列表 < /Button>
+                <SubjectNav subjectNoList={NoList} />
+            </div>
+            <div className={'layout-studentViewExamPaperWrap-content'} style={{ height: `${clientHeight - 54}px` }}>
+                <ViewExamPaperSubjects stid={'tid'} subjects={subjects} />
+            </div>
+            <div className={'layout-studentViewExamPaperWrap-info'} style={{ height: `${clientHeight - 54}px` }}>
+                <Affix offsetTop={49}><ViewExamPaperInfo /></Affix>
+                <TypeDetailsMap />
             </div>
         </div>
+        <AddSignModal type={anMark} callback={viewExaPaperHandler} />
     </>;
 }
