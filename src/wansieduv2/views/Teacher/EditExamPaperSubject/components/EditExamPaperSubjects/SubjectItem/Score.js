@@ -45,6 +45,7 @@ export function Score ({ value = 0, onChange }) {
                         if (value !== editScore) {
                             await onChange?.(editScore);
                         }
+                        setScoreStep(0);
                         setIsEdit(false);
                     }} />
                 </div> :

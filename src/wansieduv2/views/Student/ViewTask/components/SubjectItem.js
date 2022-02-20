@@ -37,7 +37,7 @@ function RenderImgUrl (props) {
     const { ImgUrl, figureStyle, zIndex = 0 } = props;
     return <figure className={figureStyle}>
         {ImgUrl.map((img, index) => {
-            return (img.includes('noMatchingUrl')) ? null : <img style={{ zIndex: zIndex + index }} key={index} src={img} alt="" />;
+            return img ? <img style={{ zIndex: zIndex + index }} key={index} src={img} alt="" /> : null;
         })}
     </figure>;
 }
@@ -46,7 +46,7 @@ function RenderImgUrl (props) {
 export function SubjectItem (props) {
     const { dispatch } = useContext(EDU_CONTEXT);
     const { subject, imgSize } = props;
-    const { No, score, checkScore, remark, type, parentId, time, url, answer_img, anMark_img, ckMark_img, check_img } = subject;
+    const { No, score, checkScore, remark, type, parentId, time, url, parentUrl, answer_img, anMark_img, ckMark_img, check_img } = subject;
     const [hasParent] = useState(Number(parentId) !== 0);
     const [containerMax, setContainerMax] = useState(0);
     const typeTr = typeof type === 'string' && type !== '' ? type.split(',') : ((Array.isArray(type) && type.length > 0) ? type : []);
@@ -55,7 +55,7 @@ export function SubjectItem (props) {
             return getImgHeight(imgUrl, imgSize);
         });
         const proUrl = (async () => {
-            const allH = await Promise.all(url.map(async (u) => {
+            const allH = await Promise.all([parentUrl, url].map(async (u) => {
                 return await getImgHeight(u, imgSize);
             }));
             return allH.reduce((t, n) => {
@@ -68,11 +68,7 @@ export function SubjectItem (props) {
         });
     }, [subject]);
     return <div className={'m-subjectItem-studentView'}>
-        {
-            hasParent &&
-            <span className={'subSubjectNo'}>{No}</span>
-        }
-        <div className={`subjectInfo ${hasParent ? 'pl' : 'nr'}`}>
+        <div className={`subjectInfo nr`}>
             <div className={'score'}>
                 <Tag color="green">{Number(checkScore) === -1 ? '未批改' : checkScore}/{score}分</Tag>
                 <Tag color={'orange'}>{smTr(time)}</Tag>
@@ -92,7 +88,7 @@ export function SubjectItem (props) {
             {remark}
         </div>}
         <div className={'answerImgsContainer'} style={{ height: containerMax + 'px' }}>
-            <RenderImgUrl ImgUrl={url} figureStyle={'questionUrls'} />
+            <RenderImgUrl ImgUrl={[parentUrl, url]} figureStyle={'questionUrls'} />
             <RenderImgUrl ImgUrl={[answer_img, check_img, anMark_img, ckMark_img]} figureStyle={'drawedImage'} zIndex={84} />
         </div>
     </div>;

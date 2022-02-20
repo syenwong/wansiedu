@@ -30,7 +30,6 @@ import { Affix, Button, message } from 'antd';
 import { AddSignModal } from '../../../globalComponents/AddSignModal';
 import { MARK_PREFIX } from '../../../service/STATIC_DATA';
 
-
 const { anMark } = MARK_PREFIX;
 export function ViewTask (props) {
     const tid = props?.match?.params?.tid;

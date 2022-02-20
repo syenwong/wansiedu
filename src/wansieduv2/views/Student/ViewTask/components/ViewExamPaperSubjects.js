@@ -18,6 +18,7 @@ import { EDU_CONTEXT } from '../../../../store';
 
 export function ViewExamPaperSubjects (props) {
     const { stid, subjects } = props;
+    console.log(subjects);
     const { state: { clientWidth } } = useContext(EDU_CONTEXT);
     const [imgSize] = useState((clientWidth - 32) * .64 - 42 - 48);
     return <>
@@ -29,35 +30,9 @@ export function ViewExamPaperSubjects (props) {
                         const No = (s?.No ?? '').replace(/\./ig, '_');
                         return <li data-isroot={1} id={`subjectItem_id_${No}`} key={i} className={'mainSubject'}>
                             <div className={'subjectLabel'}>
-                                <span className={'No'}>{i + 1}</span>
+                                <span className={'No'}>{s?.No}</span>
                             </div>
-                            {
-                                s.isParent ?
-                                    <>
-                                        
-                                        {
-                                            s.remark &&
-                                            <div className={'mainSubject_content'}>
-                                                {s.remark && <div className={'subjectRemark'}>
-                                                    {s.remark}
-                                                </div>}
-                                            </div>
-                                        }
-                                        {
-                                            Array.isArray(s.subSubjects) && s.subSubjects.length > 0 ?
-                                                <ul className={'subSubject'}>
-                                                    {
-                                                        s.subSubjects.map((ss, j) => {
-                                                            ss = Object.assign(ss, { sTid: stid });
-                                                            const _No = (ss?.No ?? '').replace(/\./ig, '_');
-                                                            return <li data-isroot={0} id={`subjectItem_id_${_No}`} key={j}><SubjectItem imgSize={imgSize} subject={ss} /></li>;
-                                                        })
-                                                    }
-                                                </ul> : '无小题'
-                                        }
-                                    </> :
-                                    <SubjectItem imgSize={imgSize} subject={s} />
-                            }
+                            <SubjectItem imgSize={imgSize} subject={s} />
                         </li>;
                     })}
                 </ul> :

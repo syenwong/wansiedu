@@ -13,7 +13,7 @@
  * @version */
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useMemo } from 'react';
-import { serializeSubject } from '../../../../service/utils';
+import { delayeringSubject, serializeSubject } from '../../../../service/utils';
 import { SubjectItem } from './SubjectItem';
 import { EDU_CONTEXT } from '../../../../store';
 import { useExamPaperAdmin } from '../../../../Controller/useExamPaperAdmin';
@@ -25,12 +25,13 @@ export function ViewExamPaperSubjects () {
     const examPaperAdmin = useExamPaperAdmin();
     useEffect(() => {
         if (currentExamPaper?.id) {
-            examPaperAdmin('getExamSubjectsList', currentExamPaper.id).then((currentExamPaperSubjects) => {
+            (async () => {
+                const currentExamPaperSubjects = await examPaperAdmin('getExamSubjectsList', currentExamPaper.id);
                 dispatch({ currentExamPaperSubjects });
-            });
+            })();
         }
     }, [currentExamPaper]);
-    const subjects = useMemo(() => serializeSubject(data, null), [data]);
+    const subjects = useMemo(() => delayeringSubject({ data }), [data]);
     return <div className={'g-viewExamPaperSubjectsList'} style={{ height: document.documentElement.offsetHeight - 150 }}>
         {
             subjects.length > 0 ?
@@ -38,40 +39,9 @@ export function ViewExamPaperSubjects () {
                     {subjects.map((s, i) => {
                         return <li key={i} className={'mainSubject'}>
                             <div className={'subjectLabel'}>
-                                <span className={'No'}>{i + 1}</span>
+                                <span className={'No'}>{s.no}</span>
                             </div>
-                            {
-                                s.isParent ?
-                                    <>
-                                        
-                                        {
-                                            (s.url || s.remark) &&
-                                            <div className={'mainSubject_content'}>
-                                                {s.remark && <div className={'subjectRemark'}>
-                                                    {s.remark}
-                                                </div>}
-                                                <Image src={s.url} alt="" />
-                                            </div>
-                                        }
-                                        {
-                                            Array.isArray(s.subSubjects) && s.subSubjects.length > 0 ?
-                                                <ul className={'subSubject'}>
-                                                    {
-                                                        s.subSubjects.map((ss, j) => {
-                                                            return <li key={j}>
-                                                                {
-                                                                    Number(ss.parentId) !== 0 &&
-                                                                    <span className={'subSubjectNo'}>{ss.No}</span>
-                                                                }
-                                                                <SubjectItem subject={ss} />
-                                                            </li>;
-                                                        })
-                                                    }
-                                                </ul> : '添加小题'
-                                        }
-                                    </> :
-                                    <SubjectItem subject={s} />
-                            }
+                            <SubjectItem subject={s} />
                         </li>;
                     })}
                 </ul> :

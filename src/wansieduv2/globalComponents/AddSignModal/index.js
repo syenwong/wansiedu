@@ -28,7 +28,7 @@ export function AddSignModal (props) {
         }, type = anMark
     } = props;
     const { state: { canvasRatio, addSubjectSignModalData }, dispatch } = useContext(EDU_CONTEXT);
-    const { sTid, url, answer_img, check_img, anMark_img, ckMark_img } = addSubjectSignModalData || {};
+    const { sTid, parentUrl, url, answer_img, check_img, anMark_img, ckMark_img } = addSubjectSignModalData || {};
     const id = addSubjectSignModalData?.[type === 'anMark' ? 'id' : 'subjectId'];
     const canvasRef = useRef();
     const [canvasHeight, setcanvasHeight] = useState();
@@ -105,7 +105,7 @@ export function AddSignModal (props) {
                    offsetTop={offsetTop}
                    canvasHeight={canvasHeight}
                    canvasWidth={canvasWidth}
-                   questionImages={url}
+                   questionImages={[parentUrl, url]}
                    imageDrawed={[answer_img, check_img, markUrl]}
                    drawImageSrc={`${id}::${drawImageSrc}`} />
     

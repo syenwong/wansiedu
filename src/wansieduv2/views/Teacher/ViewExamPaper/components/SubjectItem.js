@@ -12,12 +12,12 @@
  * @date 2021/12/12
  * @version */
 // eslint-disable-next-line no-unused-vars
-import React  from 'react';
+import React from 'react';
 import { Tag, Image } from 'antd';
 
 export function SubjectItem (props) {
     const { subject } = props;
-    const { score, remark, type, url } = subject;
+    const { score, remark, type, url, parentUrl } = subject;
     return <div className={'m-subjectItem'}>
         <div className={`subjectInfo`}>
             <div className={'score'}>
@@ -30,6 +30,10 @@ export function SubjectItem (props) {
         {remark && <div className={'subjectRemark'}>
             {remark}
         </div>}
-        {url && <div className={'subjectImg'}><Image src={url} alt="" /></div>}
+        <div className={'subjectImg'}>
+            {parentUrl && <Image src={parentUrl} alt="" />}
+            {url && <Image src={url} alt="" />}
+        </div>
+    
     </div>;
 }

@@ -46,8 +46,7 @@ function RenderImgUrl (props) {
 export function SubjectItem (props) {
     const { dispatch } = useContext(EDU_CONTEXT);
     const { subject, imgSize } = props;
-    const { No, score, checkScore, remark, type, parentId, time, url, answer_img, anMark_img, ckMark_img, check_img } = subject;
-    const [hasParent] = useState(Number(parentId) !== 0);
+    const { No, score, checkScore, remark, type, parentId, time, parentUrl, url, answer_img, anMark_img, ckMark_img, check_img } = subject;
     const [containerMax, setContainerMax] = useState(0);
     const typeTr = typeof type === 'string' && type !== '' ? type.split(',') : ((Array.isArray(type) && type.length > 0) ? type : []);
     useEffect(() => {
@@ -88,7 +87,7 @@ export function SubjectItem (props) {
             {remark}
         </div>}
         <div className={'answerImgsContainer'} style={{ height: containerMax + 'px' }}>
-            <RenderImgUrl ImgUrl={url} figureStyle={'questionUrls'} />
+            <RenderImgUrl ImgUrl={[parentUrl, url]} figureStyle={'questionUrls'} />
             <RenderImgUrl ImgUrl={[answer_img, check_img, anMark_img, ckMark_img]} figureStyle={'drawedImage'} zIndex={84} />
         </div>
     </div>;

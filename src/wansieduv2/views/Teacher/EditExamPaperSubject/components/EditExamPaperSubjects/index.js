@@ -17,11 +17,11 @@ import { EDU_CONTEXT } from '../../../../../store';
 import { SubjectItem } from './SubjectItem/';
 import { PlusOutlined, UpOutlined, DownOutlined, DeleteOutlined, PlusSquareOutlined, EditOutlined } from '@ant-design/icons';
 import { useExamPaperAdmin } from '../../../../../Controller/useExamPaperAdmin';
-import { Button, Anchor } from 'antd';
+import { Button } from 'antd';
 import { serializeSubject } from '../../../../../service/utils';
 import { SubjectImg } from './SubjectImg/SubjectImg';
 
-const { Link } = Anchor;
+
 export function EditExamPaperSubjects (props) {
     const { eid } = props;
     const { state: { currentExamPaperSubjects, currentExamPaperSubjectFilterKey } } = useContext(EDU_CONTEXT);
@@ -29,7 +29,7 @@ export function EditExamPaperSubjects (props) {
     const [subjects, setSubjects] = useState([]);
     const examPaperAdmin = useExamPaperAdmin();
     useEffect(() => {
-        const _subject = serializeSubject(data, currentExamPaperSubjectFilterKey);
+        const _subject = serializeSubject({ data, key:currentExamPaperSubjectFilterKey });
         setSubjects(_subject);
     }, [data, currentExamPaperSubjectFilterKey]);
     return <div className={'editExamPaperSubjectsList'}>
@@ -89,8 +89,10 @@ export function EditExamPaperSubjects (props) {
                 <div className={'none'}>暂无题目，请点击下方按钮添加题目</div>
         }
         <div className={'addBtnWrap'}>
-            <Button type={'primary'} size={'large'} icon={<PlusOutlined />} onClick={() => examPaperAdmin('updateSubject', 'add', { eid, No: subjects.length + 1 })}>新增（无小题）</Button>
-            <Button type={'primary'} size={'large'} ghost icon={<PlusSquareOutlined />} onClick={() => examPaperAdmin('updateSubject', 'add', { eid, No: subjects.length + 1, isParent: true })}>新增（含小题）</Button>
+            <Button type={'primary'} size={'large'} icon={<PlusOutlined />}
+                    onClick={async () => await examPaperAdmin('updateSubject', 'add', { eid, No: subjects.length + 1 })}>新增（无小题）</Button>
+            <Button type={'primary'} size={'large'} ghost icon={<PlusSquareOutlined />}
+                    onClick={async () => await examPaperAdmin('updateSubject', 'add', { eid, No: subjects.length + 1, isParent: true })}>新增（含小题）</Button>
         </div>
     </div>;
 }

@@ -68,27 +68,23 @@ export function useExamPaperAdmin () {
         },
         // 编辑题目专用
         async getExamSubjectsListForEdit () {
-            if (state?.currentExamPaper?.id) {
-                try {
-                    const { data = [], total = 0 } = await getSubjectListApi(state.currentExamPaper.id);
-                    let typeMap = [];
-                    for (const datum of data) {
-                        datum.type = (typeof datum.type === 'string' && datum.type !== '') ? datum.type.split(',') : [];
-                        typeMap = typeMap.concat(datum.type);
-                    }
-                    const totalNum = (data ?? []).reduce((v1, v2) => {
-                        return v1 + v2.score;
-                    }, 0);
-                    const currentExamPaperSubjects = { data, totalNum, total, typeMap: [...new Set(typeMap)] };
-                    dispatch({
-                        currentExamPaperSubjects
-                    });
-                    return currentExamPaperSubjects;
-                } catch (e) {
-                    throw e;
+            try {
+                const { data = [], total = 0 } = await getSubjectListApi(state.currentExamPaper.id);
+                let typeMap = [];
+                for (const datum of data) {
+                    datum.type = (typeof datum.type === 'string' && datum.type !== '') ? datum.type.split(',') : [];
+                    typeMap = typeMap.concat(datum.type);
                 }
-            } else {
-                history.replace('/teacher/examPaper');
+                const totalNum = (data ?? []).reduce((v1, v2) => {
+                    return v1 + v2.score;
+                }, 0);
+                const currentExamPaperSubjects = { data, totalNum, total, typeMap: [...new Set(typeMap)] };
+                dispatch({
+                    currentExamPaperSubjects
+                });
+                return currentExamPaperSubjects;
+            } catch (e) {
+                throw e;
             }
         },
         async getExamSubjectsList (id, role = 'teacher') {

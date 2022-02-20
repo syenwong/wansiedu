@@ -18,17 +18,28 @@ import { EDU_CONTEXT } from '../../../store';
 import { useHistory } from 'react-router-dom';
 import { EditExamPaperInfo } from './components/EditExamPaperInfo';
 import { EditExamPaperSubjects } from './components/EditExamPaperSubjects';
-import { Affix } from 'antd';
+import { Affix, message } from 'antd';
 import { EditSubjectModal } from './components/EditSubjectModal/';
 import { useExamPaperAdmin } from '../../../Controller/useExamPaperAdmin';
 
 export function EditExamPaperSubject () {
+    const history = useHistory();
     const { state: { currentExamPaper }, dispatch } = useContext(EDU_CONTEXT);
     const { id } = currentExamPaper || {};
     const examPaperAdmin = useExamPaperAdmin();
     useEffect(() => {
         dispatch({ currentTeacherNavKey: 'examPaper' });
-        examPaperAdmin('getExamSubjectsListForEdit');
+        (async () => {
+            if (currentExamPaper?.id) {
+                try {
+                    await examPaperAdmin('getExamSubjectsListForEdit');
+                } catch (e) {
+                    message.error(e.message);
+                }
+            } else {
+                history.replace('/teacher/examPaper');
+            }
+        })();
     }, []);
     return <div className={'g-EditExamPaperWrap'}>
         <div className={'editExamPaperContainer'}>

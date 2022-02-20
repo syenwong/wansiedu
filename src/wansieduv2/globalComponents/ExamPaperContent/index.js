@@ -83,7 +83,7 @@ export function ExamPaperContent (props) {
                 </div>;
             case 'homework':
                 return <div className={'g-tableAction'}>
-                    <Button type="primary" onClick={() => examPaperAdmin('viewExaPaper', c)}>预览</Button>
+                    <Button type="primary" onClick={async () => await examPaperAdmin('viewExaPaper', c)}>预览</Button>
                     {editHomeworkData?.eid === c.id ? <div className={'hasSelect'}><CheckOutlined /></div> : <Button type="primary" onClick={() => examPaperAdmin('selectExaPaper', c)}>选择</Button>}
                 </div>;
         }

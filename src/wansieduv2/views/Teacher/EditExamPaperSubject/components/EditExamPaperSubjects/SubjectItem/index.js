@@ -14,7 +14,7 @@
 import './style.less';
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useState } from 'react';
-import { Tag, Image, Button, Upload } from 'antd';
+import { Tag, Image, Button, Upload, message } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { useExamPaperAdmin } from '../../../../../../Controller/useExamPaperAdmin';
 import { SubjectImg } from '../SubjectImg/SubjectImg';
@@ -32,7 +32,7 @@ export function SubjectItem (props) {
         try {
             await examPaperAdmin('updateSubjectItem', currentExamPaper.id, id, { key, value });
         } catch (e) {
-            console.log(e);
+            message.error(e);
         }
     };
     return <div className={'m-subjectItem-edit'}>

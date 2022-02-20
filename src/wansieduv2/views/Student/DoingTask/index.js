@@ -120,8 +120,9 @@ export function DoingTask () {
                 await startTaskApi(currentTask.id);
             }
             const data = await getSubjectlistApi(currentTask.id);
-            const subjectWithTimes = resolveSubjectUrl(data.subjectWithTimes);
-            const _subjects = delayeringSubject(subjectWithTimes);
+            const _subjects = delayeringSubject({ data: data.subjectWithTimes });
+            console.log(_subjects);
+            debugger
             let _subjectsTd;
             const keysLength = _subjects.length;
             if (keysLength <= 40) {
@@ -138,8 +139,8 @@ export function DoingTask () {
     };
     const setCurrentSubject = async (_subjects, noindex) => {
         const subject = _subjects[noindex];
-        const { id, url, answer_img } = subject;
-        setBackgroundImages(url);
+        const { id, url, parentUrl, answer_img } = subject;
+        setBackgroundImages([parentUrl, url]);
         setDrawImage(`${id}::${answer_img}`);
         setCurrentSubjectKeyIndex(noindex);
     };

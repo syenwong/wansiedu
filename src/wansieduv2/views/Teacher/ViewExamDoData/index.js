@@ -103,8 +103,7 @@ export function ViewExamDoData (props) {
                 const { task, studentWithTimes } = exam;
                 _Tasks.push(task);
                 for (const student of studentWithTimes) {
-                    const subjects = delayeringSubject(student.subjectTimeAndAnswers, eid, 'subjectId');
-                    student.subjectTimeAndAnswersList = subjects;
+                    student.subjectTimeAndAnswersList = delayeringSubject({ data: student.subjectTimeAndAnswers, subjectIdKey: 'subjectId' });
                     student.task = task;
                     student.totalTime = 0;
                     student.checkScoreTotal = 0;

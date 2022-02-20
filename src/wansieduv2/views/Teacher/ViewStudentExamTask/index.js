@@ -48,14 +48,8 @@ export function ViewStudentExamTask (props) {
         }
         
     };
-    useEffect(() => {
-        console.log(ViewStudentExamTask);
-        if (ViewStudentExamTask) {
-        
-        }
-    }, [ViewStudentExamTask]);
     return <>
-        <div className={'g-studentViewExamPaperWrap'}>
+        <div className={'g-teacherViewStudentExamPaperWrap'}>
             <div className={'layout-studentViewExamPaperWrap-nav'}>
                 <Button type={'primary'} onClick={() => window.history.go(-1)}> 返回作业列表 < /Button>
                 <SubjectNav subjectNoList={NoList} />

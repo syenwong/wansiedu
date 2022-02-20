@@ -15,7 +15,7 @@ import React, { useContext } from 'react';
 import { EDU_CONTEXT } from '../store';
 import { Modal } from 'antd';
 import { getTaskListApi, getSubjectlistApi } from '../service/api/student';
-import { resolveSubjectUrl, serializeSubject } from '../service/utils';
+import { delayeringSubject, resolveSubjectUrl, serializeSubject } from '../service/utils';
 
 
 export function useStudentHandlers () {
@@ -40,8 +40,7 @@ export function useStudentHandlers () {
                 let checkScoreTotal = 0;
                 let scoreTotal = 0;
                 let totalTime = 0;
-                const _subjectWithTimes = resolveSubjectUrl(subjectWithTimes);
-                for (const currentTaskExaPaperElement of _subjectWithTimes) {
+                for (const currentTaskExaPaperElement of subjectWithTimes) {
                     const { checkScore, score, time } = currentTaskExaPaperElement;
                     checkScoreTotal += checkScore < 0 ? 0 : checkScore;
                     scoreTotal += score;
@@ -52,67 +51,26 @@ export function useStudentHandlers () {
                     typeDetailsMap[key].ratio = checkScore > -1 ? (checkScore / (time / 60000)).toFixed(2) : 'NA';
                     typeDetailsMap[key].key = key;
                 }
-                const _subjects = serializeSubject(_subjectWithTimes, null, true);
+                const _subjects = delayeringSubject({ data: subjectWithTimes, key: null });
                 
                 const NoList = [];
                 for (const subject of _subjects) {
-                    const { isParent, No, checkScore, score, type, subSubjects, answer_img, url, parentUrl } = subject;
-                    if (isParent === 1 && Array.isArray(subSubjects) && subSubjects.length > 0) {
-                        for (const subSubject of subSubjects) {
-                            const {
-                                type: _sType,
-                                No: _sNo,
-                                checkScore: _sCheckScore,
-                                score: _sScore,
-                                answer_img: _sAnswerImg,
-                                url: _sUrl,
-                                parentUrl
-                            } = subSubject;
-                            // 题号列表
-                            NoList.push({
-                                Noo: _sNo,
-                                No: _sNo.replaceAll('.', '_'),
-                                hasAnswer: Boolean(_sAnswerImg),
-                                hasChecked: _sCheckScore > -1,
-                                hasError: _sCheckScore < _sScore
-                            });
-                            // 分类整理
-                            if (_sType) {
-                                const _typeAr = _sType.split(',');
-                                for (const _typeArElement of _typeAr) {
-                                    typeDetailsMap[_typeArElement].Nos = typeDetailsMap[_typeArElement].Nos || [];
-                                    typeDetailsMap[_typeArElement].Nos.push(_sNo);
-                                }
+                    const { No, checkScore, score, type, answer_img } = subject;
+                    NoList.push({
+                        Noo: No,
+                        No: No.replaceAll('.', '_'),
+                        hasAnswer: Boolean(answer_img),
+                        hasChecked: checkScore > -1,
+                        hasError: checkScore < score
+                    });
+                    // 分类整理
+                    if (type) {
+                        const typeAr = type.split(',');
+                        for (const _typeArElement of typeAr) {
+                            if (typeDetailsMap?.[_typeArElement]) {
+                                typeDetailsMap[_typeArElement].Nos = typeDetailsMap[_typeArElement].Nos || [];
+                                typeDetailsMap[_typeArElement].Nos.push(No);
                             }
-                            // 题目整理
-                            subSubject.url = [_sUrl];
-                            if (parentUrl) {
-                                subSubject.url.unshift(parentUrl);
-                            }
-                        }
-                    } else {
-                        // 题号列表
-                        NoList.push({
-                            Noo: No,
-                            No: No.replaceAll('.', '_'),
-                            hasAnswer: Boolean(answer_img),
-                            hasChecked: checkScore > -1,
-                            hasError: checkScore < score
-                        });
-                        // 分类整理
-                        if (type) {
-                            const typeAr = type.split(',');
-                            for (const _typeArElement of typeAr) {
-                                if (typeDetailsMap?.[_typeArElement]) {
-                                    typeDetailsMap[_typeArElement].Nos = typeDetailsMap[_typeArElement].Nos || [];
-                                    typeDetailsMap[_typeArElement].Nos.push(No);
-                                }
-                            }
-                        }
-                        // 图片整理
-                        subject.url = [url];
-                        if (parentUrl) {
-                            subject.url.unshift(parentUrl);
                         }
                     }
                 }

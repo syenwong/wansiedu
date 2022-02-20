@@ -81,7 +81,7 @@ export function CheckAnswerHomework () {
     const getSubjectList = async () => {
         try {
             const { data } = await getSubjectListApi(eid);
-            const subjects = delayeringSubject(data);
+            const subjects = delayeringSubject({ data });
             setSubjectsList(subjects);
             return subjects;
         } catch (e) {
@@ -114,7 +114,7 @@ export function CheckAnswerHomework () {
             const subjectId = currentSubject.id;
             const { formData } = await childRef.current.submitDrawImage(sTid, subjectId, 'check');
             const score = editSubjectForm.getFieldValue('score');
-            await checkAnswerApi({ sTid, subjectId, score, file: formData, url: currentSubjectAn.ckMark_img});
+            await checkAnswerApi({ sTid, subjectId, score, file: formData, url: currentSubjectAn.ckMark_img });
             await getDatas();
             setSpinning(false);
             return true;
@@ -256,7 +256,9 @@ export function CheckAnswerHomework () {
         setCurrentSubjectAn(an);
     };
     useEffect(() => {
-        setCurrentData(switchStudentIndex, switchSubjectIndex).then();
+        (async () => {
+            await setCurrentData(switchStudentIndex, switchSubjectIndex);
+        })();
     }, [switchStudentIndex, switchSubjectIndex]);
     useEffect(() => {
         dispatch({ currentTeacherNavKey: 'homework' });
@@ -342,7 +344,7 @@ export function CheckAnswerHomework () {
                                    offsetTop={90}
                                    canvasWidth={canvasWidth}
                                    canvasHeight={canvasHeight}
-                                   questionImages={currentSubject?.url}
+                                   questionImages={[currentSubject?.parentUrl, currentSubject?.url]}
                                    imageDrawed={[currentSubjectAn?.answer_img, currentSubjectAn?.anMark_img, currentSubjectAn?.ckMark_img]}
                                    drawImageSrc={drawImage} />
                     </div>

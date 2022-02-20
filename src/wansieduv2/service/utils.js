@@ -51,10 +51,16 @@ export function formatDateHw (t, f = 'YYYY-MM-DD HH:mm') {
     let _t = t.replace(/-/ig, '/');
     return moment(new Date(_t)).format(f);
 }
-
-export function serializeSubject (data, key) {
+/*
+* serializeSubject 的多用
+* 1 生成大题 －> 小题的树形结构，小题以 subSubjects 属性做了集合
+* 同时 添加 no 属性，表示题号
+* */
+export function serializeSubject ({ data, key = null, subjectIdKey = 'id' } = {}) {
+    const _data = resolveSubjectUrl(data);
     let subjects = [];
-    const resultData = data.filter(s => {
+    // type 分类 过滤题目
+    const resultData = _data.filter(s => {
         if (s.isParent) {
             return true;
         } else {
@@ -64,7 +70,8 @@ export function serializeSubject (data, key) {
     const subjectParents = {};
     const subjectChildren = {};
     for (const sa of resultData) {
-        const { parentId, id } = sa;
+        const { parentId } = sa;
+        const id = sa[subjectIdKey];
         if (parentId === 0) {
             sa.subSubjects = [];
             subjectParents[id] = sa;
@@ -74,14 +81,20 @@ export function serializeSubject (data, key) {
     }
     for (const subjectCs of Object.values(subjectChildren)) {
         const { parentId } = subjectCs;
-        if (subjectParents[parentId]) {
-            subjectCs.parentUrl = subjectParents[parentId].url;
+        const parentSubject = subjectParents[parentId];
+        if (parentSubject) {
+            const purl = parentSubject.url;
+            if (purl) {
+                subjectCs.parentUrl = purl;
+            }
             subjectParents[parentId].subSubjects.push(subjectCs);
         }
     }
-    subjects = (Object.values(subjectParents).sort((s1, s2) => s1.sort - s2.sort)).filter(s => {
-        return !key || !s.isParent || s.subSubjects.length > 0;
-    });
+    subjects = (Object.values(subjectParents)
+        .sort((s1, s2) => s1.sort - s2.sort))
+        .filter(s => {
+            return !key || !s.isParent || s.subSubjects.length > 0;
+        });
     for (const subjectElement of subjects) {
         subjectElement.subSubjects.sort((s1, s2) => s1.sort - s2.sort);
     }
@@ -97,7 +110,7 @@ export function serializeSubject (data, key) {
     }
     return subjects;
 }
-export const resolveSubjectUrl = (subjects, subjectIdKey = 'id') => {
+export const resolveSubjectUrl = (subjects) => {
     for (const sa of subjects) {
         const { answerUrl, checkUrl } = sa;
         /*
@@ -127,42 +140,25 @@ export const resolveSubjectUrl = (subjects, subjectIdKey = 'id') => {
     return subjects;
 };
 
-
-export function delayeringSubject (data, tid, key = 'id') {
-    const subjectParents = {};
-    const subjectChildren = {};
-    for (const sa of data) {
-        const { url } = sa;
-        sa.url = [url];
-        if (sa.parentId === 0) {
-            sa.children = [];
-            subjectParents[sa[key]] = sa;
-        } else {
-            subjectChildren[sa[key]] = sa;
-        }
-    }
-    for (const subjectCs of Object.values(subjectChildren)) {
-        const { parentId, answerUrl, checkUrl, id: subjectId } = subjectCs;
-        /*
-        * 赋值给父级元素
-        * */
-        if (subjectParents[parentId]) {
-            subjectParents[parentId].children.push(subjectCs);
-        }
-    }
-    const subjectsAsB = Object.values(subjectParents).sort(sortSorts);
+/*
+* delayeringSubject 的作用
+* 1，先生成属性结构，
+* 2,再进行扁平化
+* */
+export function delayeringSubject ({ data, key = null, subjectIdKey = 'id' }) {
+    const _subjects = serializeSubject({ data, key, subjectIdKey });
+    const subjectsAsB = Object.values(_subjects).sort(sortSorts);
     const subjectsAsC = {};
     for (let i = 0; i < subjectsAsB.length; i++) {
         const subjectsAsBElement = subjectsAsB[i];
-        if (Array.isArray(subjectsAsBElement.children) && subjectsAsBElement.children.length > 0) {
-            subjectsAsBElement.children.sort(sortSorts).forEach((s, j) => {
-                const no = `${i + 1}.${j + 1}`;
-                s.no = Number(no);
-                subjectsAsC[no] = s;
-                if (subjectsAsBElement?.url[0]) {
-                    s.url.unshift(subjectsAsBElement.url[0]);
-                }
-            });
+        if (Array.isArray(subjectsAsBElement.subSubjects) && subjectsAsBElement.subSubjects.length > 0) {
+            subjectsAsBElement.subSubjects
+                .sort(sortSorts)
+                .forEach((s, j) => {
+                    const no = `${i + 1}.${j + 1}`;
+                    s.no = Number(no);
+                    subjectsAsC[no] = s;
+                });
         } else {
             const no = `${i + 1}`;
             subjectsAsBElement.no = Number(no);

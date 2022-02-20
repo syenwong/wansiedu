@@ -223,7 +223,7 @@ export function CanvasCom (props) {
         <div className={'canvasContainer'} id={'canvasDiv'} style={{ width: canvasWidth + 'px', height: canvasHeight + 'px' }}>
             <figure className={'canvasQuestionImages'}>
                 {questionImages.map((img, index) => {
-                    return <img key={index} src={img} alt={index} />;
+                    return img ? <img key={index} src={img} alt={index} /> : null;
                 })}
             </figure>
             <div className={'drawedImage'}>

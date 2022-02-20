@@ -70,14 +70,16 @@ export function EditSubjectModal (props) {
             }
             await editSubjectApi(requestData);
             const currentExamPaperSubjects = await examPaperAdmin('getExamSubjectsList', eid);
+            setAddExaImg(null);
+            setConfirmLoading(false);
+            setScoreStep(1);
             dispatch({ currentExamPaperSubjects });
             dispatch({
                 editSubjectModalVisible: false,
                 currentEditSubject: null
             });
-            setAddExaImg(null);
-            setConfirmLoading(false);
         } catch (e) {
+            setConfirmLoading(false);
             ModalError(e.message);
         }
     };
@@ -86,6 +88,7 @@ export function EditSubjectModal (props) {
         editSubjectForm.resetFields();
         setAddExaImg(null);
         setAddExaImgPreview(null);
+        setScoreStep(1);
     };
     const setStepsHandler = (e) => {
         const t = e.target;

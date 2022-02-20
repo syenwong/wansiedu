@@ -14,7 +14,7 @@
 import './style.less';
 import React, { useState, useEffect, useContext } from 'react';
 import { EDU_CONTEXT } from '../../../store';
-import { Table, Button, Tooltip, Form, Input, DatePicker, Modal } from 'antd';
+import { Table, Button, Tooltip, Form, Input, DatePicker, Modal, Tag } from 'antd';
 import { delTaskApi, getHomeWorkListApi, getListSidsApi } from '../../../service/api/teacher/homework';
 import { useHistory } from 'react-router-dom';
 import { formatDateHw } from '../../../service/utils';
@@ -106,14 +106,6 @@ export function HomeWork () {
     };
     const columns = [
         {
-            title: 'N',
-            width: 42,
-            align: 'center',
-            render (t, c, i) {
-                return i + 1;
-            }
-        },
-        {
             title: '有效时间',
             dataIndex: 'startTime',
             width: '260px',
@@ -123,14 +115,18 @@ export function HomeWork () {
         },
         {
             title: '作业名称',
-            dataIndex: 'name'
+            dataIndex: 'name',
+            width: '20%'
         },
         {
             title: '试卷名称',
             dataIndex: 'ename',
-            width: '30%',
+            
             render (t, c, i) {
-                return <div className={'link'} onClick={() => showExpaper(c)}>{c.elabels ? <Tooltip placement="top" title={c.elabels.replace(/,/g, ' | ')}>{t}</Tooltip> : t}</div>;
+                return <div className={'link'}>
+                    <span onClick={() => showExpaper(c)}>{t}</span>
+                    {c.elabels && c.elabels.split(',').map(l => <Tag>{l}</Tag>)}
+                </div>;
             }
         },
         {

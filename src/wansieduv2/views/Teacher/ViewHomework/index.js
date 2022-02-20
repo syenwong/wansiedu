@@ -97,8 +97,7 @@ export function ViewHomework () {
             setLoading(true);
             const _listStudentTime = await listStudentTimeApi(tid);
             for (const listStudentTimeElement of _listStudentTime) {
-                const subjectTimeAndAnswers = resolveSubjectUrl(listStudentTimeElement.subjectTimeAndAnswers);
-                listStudentTimeElement.subjectTimeAndAnswersList = delayeringSubject(subjectTimeAndAnswers, tid, 'subjectId');
+                listStudentTimeElement.subjectTimeAndAnswersList = delayeringSubject({ data: listStudentTimeElement.subjectTimeAndAnswers, subjectIdKey: 'subjectId' });
             }
             const __listStudentTime = {
                 all: [],
