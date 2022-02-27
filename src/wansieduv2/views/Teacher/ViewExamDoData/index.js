@@ -17,12 +17,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, Modal, Tooltip, Table, Form, Input, Select, Tag, Radio } from 'antd';
 import { delayeringSubject, formatDateHw, getStudentGrade, smTr } from '../../../service/utils';
 import { useHistory } from 'react-router-dom';
-import { FileAddOutlined } from '@ant-design/icons';
 import { listStudentTimeByExamApi, listStudentTimeByExamDownApi } from '../../../service/api/teacher/exam';
-import { GRADE_MAP, HOMEWORK_STATUS_MAP } from '../../../service/STATIC_DATA';
+import { GRADE_MAP, HOMEWORK_STATUS_MAP, MARK_PREFIX } from '../../../service/STATIC_DATA';
 import { EDU_CONTEXT } from '../../../store';
-import { DoDataViewAnswer } from '../../../globalComponents/DoDataViewAnswer';
+import { AddSignModal } from '../../../globalComponents/AddSignModal';
 
+const { ckMark } = MARK_PREFIX;
 const { Option } = Select;
 const { Item, useForm } = Form;
 export function ViewExamDoData (props) {
@@ -33,27 +33,18 @@ export function ViewExamDoData (props) {
     const [DataSource, setDataSource] = useState([]);
     const [AllStudents, setAllStudents] = useState([]);
     const [Tasks, setTasks] = useState([]);
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [selectedRow, setSelectedRow] = useState([]);
     const [loading, setLoading] = useState(false);
     const [allNames, setAllNames] = useState([]);
     const [subjectsNo, setAllSubjectsNo] = useState([]);
     const [allTypes, setAllTypes] = useState([]);
-    const [viewAnswerVisible, setViewAnswerVisible] = useState(false);
-    const [viewAnswerContent, setViewAnswerContent] = useState(null);
+    
     const [filterType, setFilterType] = useState('checkScore');
     const downStudentTime = async () => {
         try {
-            let sidsAr = [];
-            if (selectedRow.length === 0) {
-                sidsAr = AllStudents.map(h => {
-                    return h.id;
-                });
-            } else {
-                sidsAr = selectedRow.map(r => r.id);
-            }
+            let sidsAr = AllStudents.map(h => {
+                return h.id;
+            });
             await listStudentTimeByExamDownApi(eid, [...new Set(sidsAr)].join(','), ename);
-            setSelectedRowKeys([]);
         } catch (e) {
             Modal.error({ title: e.message });
         }
@@ -156,7 +147,11 @@ export function ViewExamDoData (props) {
                 });
                 const grade = GRADE_MAP[getStudentGrade(a.startTime)];
                 const labels = '(' + grade + ')' + (labelsAr.join(',') ? ':' + labelsAr.join(',') : '');
-                return <Tooltip placement="top" title={labels}>{t}</Tooltip>;
+                return <Tooltip placement="top" title={labels} onClick={() => {
+                    dispatch({ ViewStudentExamTask: a });
+                    const { id } = a;
+                    history.push(`/teacher/ViewStudentExamTask/${a.task.id}/${id}`);
+                }}>{t}</Tooltip>;
             },
             fixed: 'left'
         },
@@ -175,8 +170,9 @@ export function ViewExamDoData (props) {
                 render (t, a) {
                     const { spendTime, score, checkScore } = t;
                     return <div className={'detail'} onClick={() => {
-                        setViewAnswerVisible(true);
-                        setViewAnswerContent(t);
+                        dispatch({
+                            addSubjectSignModalData: Object.assign({}, t, { no, sTid: a.stid })
+                        });
                     }}>
                         <Tag color={'blue'}>{smTr(spendTime)}</Tag><Tag color={'green'}>{checkScore}</Tag>
                     </div>;
@@ -247,12 +243,14 @@ export function ViewExamDoData (props) {
         }
     ];
     useEffect(() => {
-        if (eid) {
-            getAllStudentTimeList();
-        } else {
-            history.push('/teacher/examPaper');
-        }
-        dispatch({ currentTeacherNavKey: 'examPaper' });
+        (async () => {
+            if (eid) {
+                await getAllStudentTimeList();
+            } else {
+                history.push('/teacher/examPaper');
+            }
+            dispatch({ currentTeacherNavKey: 'examPaper' });
+        })();
     }, []);
     return <div className={'g-homeworkviewdodata'}>
         <div className={'g-searchForm g-viewdoDataHeader'}>
@@ -272,14 +270,6 @@ export function ViewExamDoData (props) {
                     <Item name={'labels'}>
                         <Input style={{ width: 100 }} placeholder={'学生分类'} />
                     </Item>
-                    {/*<Item name={'status'}>*/}
-                    {/*    <Select style={{ width: 100 }} placeholder={'完成状态'}>*/}
-                    {/*        <Option value="">全部</Option>*/}
-                    {/*        <Option value="done">完成</Option>*/}
-                    {/*        <Option value="doing">做题中</Option>*/}
-                    {/*        <Option value="expire">过期</Option>*/}
-                    {/*    </Select>*/}
-                    {/*</Item>*/}
                     <Button style={{ marginRight: '4px' }} type={'primary'} htmlType={'submit'}>筛选</Button>
                     <Button style={{ marginRight: '4px' }} type={'primary'} onClick={resetDataSource}>重置</Button>
                 </Form>
@@ -313,14 +303,6 @@ export function ViewExamDoData (props) {
                bordered
                scroll={{ x: (allTypes.length + subjectsNo.length) + 6 * 72, y: clientHeight - 185 }}
                pagination={false} />
-        <Modal maskClosable={false}
-               title={<div>{ename}</div>}
-               width={'auto'}
-               closable={true}
-               footer={null}
-               onCancel={() => setViewAnswerVisible(false)}
-               visible={viewAnswerVisible}>
-            <DoDataViewAnswer modalHeight={clientHeight - 200} viewAnswerContent={viewAnswerContent} />
-        </Modal>
+        <AddSignModal type={ckMark} callback={getAllStudentTimeList} />
     </div>;
 }

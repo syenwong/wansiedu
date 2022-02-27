@@ -116,7 +116,9 @@ export function Students () {
         }
     ];
     useEffect(() => {
-        getStudentList();
+        (async () => {
+            await getStudentList();
+        })();
         dispatch({
             currentTeacherNavKey: 'student'
         });

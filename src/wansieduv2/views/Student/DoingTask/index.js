@@ -121,8 +121,6 @@ export function DoingTask () {
             }
             const data = await getSubjectlistApi(currentTask.id);
             const _subjects = delayeringSubject({ data: data.subjectWithTimes });
-            console.log(_subjects);
-            debugger
             let _subjectsTd;
             const keysLength = _subjects.length;
             if (keysLength <= 40) {

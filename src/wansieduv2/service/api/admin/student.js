@@ -41,7 +41,7 @@ export async function getStudentsListApi (configs = {}) {
         const { total, data } = await Ax.get('/admin/listStudent', _configs);
         const students = [];
         for (const _student of data) {
-            const grade = GRADE_MAP[getStudentGrade(_student.startTime)];
+            const grade = getStudentGrade(_student.startTime);
             students.push(Object.assign({}, _student, { grade }));
         }
         return { total, students };

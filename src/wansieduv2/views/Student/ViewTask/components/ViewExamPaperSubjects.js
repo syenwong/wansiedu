@@ -18,7 +18,6 @@ import { EDU_CONTEXT } from '../../../../store';
 
 export function ViewExamPaperSubjects (props) {
     const { stid, subjects } = props;
-    console.log(subjects);
     const { state: { clientWidth } } = useContext(EDU_CONTEXT);
     const [imgSize] = useState((clientWidth - 32) * .64 - 42 - 48);
     return <>

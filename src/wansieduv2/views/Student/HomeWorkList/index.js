@@ -45,9 +45,11 @@ export function HomeWorkList () {
         });
     };
     useEffect(() => {
-        actionHandler('getTaskList').then(r => {
+        (async () => {
+            const r = await actionHandler('getTaskList');
             onSearch('', r);
-        });
+        })();
+        
     }, []);
     return <>
         <GlobalTop />

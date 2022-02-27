@@ -276,9 +276,7 @@ export function CheckAnswerHomework () {
         <div className={'g-chAnHeader'}>
             <div className={'m-anInfo'} style={{ width: canvasWidth + 'px' }}>
                 <div className={'anInfoContent'}>
-                    <StepBackwardOutlined onClick={() => {
-                        switchStudentIndexHandler('reduce');
-                    }} className={'StepBackwardOutlined'} />
+                    <StepBackwardOutlined onClick={async () => await switchStudentIndexHandler('reduce')} className={'StepBackwardOutlined'} />
                     <div className={'subjectSwitch'}>
                         <Radio.Group onChange={(e) => setSubjectAutoSwitch(Number(e.target.value))} defaultValue={1}>
                             <Radio value={1}>学生</Radio>

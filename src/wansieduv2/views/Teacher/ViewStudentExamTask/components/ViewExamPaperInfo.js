@@ -12,17 +12,17 @@
  * @date 2021/12/11
  * @version */
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { EDU_CONTEXT } from '../../../../store';
-import { Tag } from 'antd';
+import { Button, Drawer, Table, Tag } from 'antd';
 import { smTr } from '../../../../service/utils';
 
-export function ViewExamPaperInfo () {
+export function ViewExamPaperInfo (props) {
+    const { studentInfo } = props;
+    const { state: { currentHomeWorkData } } = useContext(EDU_CONTEXT);
+    const { name, labels = '', createTime } = currentHomeWorkData || {};
+    const { total, checkScoreTotal, scoreTotal, totalTime } = studentInfo || {};
     
-    const { state: { currentTask, currentTaskExaPaper, ViewStudentExamTask } } = useContext(EDU_CONTEXT);
-    const { name, labels = '', createTime } = currentTask || {};
-    const { total, checkScoreTotal, scoreTotal, totalTime } = ViewStudentExamTask || {};
-   
     return <div className={'g-viewExamPaper_info'}>
         <h4>{name}</h4>
         <p className={'createTime'}> {createTime}</p>
@@ -42,7 +42,5 @@ export function ViewExamPaperInfo () {
                 </div>
             </div>
         }
-    
-    
     </div>;
 }

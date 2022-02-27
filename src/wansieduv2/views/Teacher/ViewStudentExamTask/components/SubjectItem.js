@@ -37,7 +37,7 @@ function RenderImgUrl (props) {
     const { ImgUrl, figureStyle, zIndex = 0 } = props;
     return <figure className={figureStyle}>
         {ImgUrl.map((img, index) => {
-            return (img.includes('noMatchingUrl')) ? null : <img style={{ zIndex: zIndex + index }} key={index} src={img} alt="" />;
+            return img ? <img style={{ zIndex: zIndex + index }} key={index} src={img} alt="" /> : null;
         })}
     </figure>;
 }
@@ -54,7 +54,7 @@ export function SubjectItem (props) {
             return getImgHeight(imgUrl, imgSize);
         });
         const proUrl = (async () => {
-            const allH = await Promise.all(url.map(async (u) => {
+            const allH = await Promise.all([url, parentUrl].map(async (u) => {
                 return await getImgHeight(u, imgSize);
             }));
             return allH.reduce((t, n) => {
@@ -80,7 +80,7 @@ export function SubjectItem (props) {
                     dispatch({
                         addSubjectSignModalData: subject
                     });
-                }}>我还想再改改...</Button>
+                }}>再做几个标记</Button>
             </div>
         </div>
         {remark && <div className={'subjectRemark'}>

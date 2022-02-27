@@ -24,6 +24,7 @@ export function useStudentHandlers () {
         async getTaskList () {
             try {
                 const studentTaskList = await getTaskListApi();
+                console.log(studentTaskList);
                 dispatch({
                     studentTaskListOrigin: studentTaskList
                 });

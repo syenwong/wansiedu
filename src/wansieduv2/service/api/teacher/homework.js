@@ -93,7 +93,7 @@ export async function checkAnswerApi ({ sTid, subjectId, score, url, file }) {
         if (url) {
             params.url = url;
         }
-        if (score) {
+        if (typeof score !== 'undefined') {
             params.score = score;
         }
         return await Ax.post(`/teacher/checkAnswer`, params, {
@@ -118,5 +118,13 @@ export async function delTaskApi (taskId) {
     try {
         return await Ax.post('/teacher/delTask', { taskId });
     } catch (e) {
+    }
+}
+// 单个学生作业完成情况
+export async function studentTimeApi (taskId, sid) {
+    try {
+        return await Ax.get(`/teacher/studentTime`, { taskId, sid });
+    } catch (e) {
+        throw e;
     }
 }

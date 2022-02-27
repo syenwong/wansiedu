@@ -72,7 +72,7 @@ export default [
             },
             // 查看个人作业情况
             {
-                path: '/teacher/ViewStudentExamTask/',
+                path: '/teacher/ViewStudentExamTask/:stid/:sid',
                 component: ViewStudentExamTask
             },
             // 查看轨迹

@@ -38,8 +38,6 @@ export function ViewHomework () {
     const [filterValues, setFilterValues] = useState([]);
     const [datasource, setDataSource] = useState([]);
     const [plazNum, setPlazNum] = useState(0);
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [selectedRow, setSelectedRow] = useState([]);
     const [allNames, setAllNames] = useState([]);
     const [subjectsNo, setAllSubjectsNo] = useState([]);
     const [allTypes, setAllTypes] = useState([]);
@@ -78,16 +76,10 @@ export function ViewHomework () {
     };
     const downStudentTime = async () => {
         try {
-            let sidsAr = [];
-            if (selectedRow.length === 0) {
-                sidsAr = studentsStatusList.all.map(h => {
-                    return h.id;
-                });
-            } else {
-                sidsAr = selectedRow.map(r => r.id);
-            }
+            let sidsAr = studentsStatusList.all.map(h => {
+                return h.id;
+            });
             await downStudentTimeApi(tid, [...new Set(sidsAr)].join(','));
-            setSelectedRowKeys([]);
         } catch (e) {
             console.log(e);
         }
@@ -192,7 +184,8 @@ export function ViewHomework () {
                 const labels = '(' + grade + '):' + labelsAr.join(',');
                 return <Tooltip placement="top" title={labels} onClick={() => {
                     dispatch({ ViewStudentExamTask: a });
-                    history.push('/teacher/ViewStudentExamTask');
+                    const { id } = a;
+                    history.push(`/teacher/ViewStudentExamTask/${tid}/${id}`);
                 }}>{t}</Tooltip>;
             },
             fixed: 'left'
@@ -200,7 +193,7 @@ export function ViewHomework () {
         ...(subjectsNo.map((l, index) => {
             const { no, score } = l;
             return {
-                title: <><p>{no}</p><p>总分<Tag color={'green'}>{score}</Tag></p> </>,
+                title: <><p>{no}</p><p>总分<Tag key={index} color={'green'}>{score}</Tag></p> </>,
                 dataIndex: `no_${no}`,
                 width: 100,
                 sorter: (a, b) => {
@@ -215,7 +208,7 @@ export function ViewHomework () {
                             addSubjectSignModalData: Object.assign({}, t, { no, sTid: stid })
                         });
                     }}>
-                        <Tag color={'blue'}>{smTr(spendTime)}</Tag><Tag color={'green'}>{checkScore}</Tag>
+                        <Tag key={index} color={'blue'}>{smTr(spendTime)}</Tag><Tag color={'green'}>{checkScore}</Tag>
                     </div>;
                 }
             };
