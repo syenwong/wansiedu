@@ -29,13 +29,14 @@ import { useStudentHandlers } from '../../../Controller/useStudentHandlers';
 import { Affix, Button, message } from 'antd';
 import { AddSignModal } from '../../../globalComponents/AddSignModal';
 import { MARK_PREFIX } from '../../../service/STATIC_DATA';
+import { DrawerInfo } from '../../Teacher/ViewStudentExamTask/components/DrawerInfo';
 
 const { anMark } = MARK_PREFIX;
 export function ViewTask (props) {
     const tid = props?.match?.params?.tid;
     const history = useHistory();
     const { state: { clientHeight, currentTaskExaPaper } } = useContext(EDU_CONTEXT);
-    const { subjects = [], NoList = [] } = currentTaskExaPaper || {};
+    const { typeDetailsList = [], subjects = [], NoList = [] } = currentTaskExaPaper || {};
     const studentHandlers = useStudentHandlers();
     const viewExaPaperHandler = async () => {
         try {
@@ -61,7 +62,10 @@ export function ViewTask (props) {
                 <ViewExamPaperSubjects stid={tid} subjects={subjects} />
             </div>
             <div className={'layout-studentViewExamPaperWrap-info'} style={{ height: `${clientHeight - 54}px` }}>
-                <Affix offsetTop={49}><ViewExamPaperInfo /></Affix>
+                <Affix offsetTop={49}>
+                    <ViewExamPaperInfo />
+                    <DrawerInfo typeDetailsList={typeDetailsList} />
+                </Affix>
                 <TypeDetailsMap />
             </div>
         </div>

@@ -46,8 +46,7 @@ function RenderImgUrl (props) {
 export function SubjectItem (props) {
     const { dispatch } = useContext(EDU_CONTEXT);
     const { subject, imgSize } = props;
-    const { No, score, checkScore, remark, type, parentId, time, url, parentUrl, answer_img, anMark_img, ckMark_img, check_img } = subject;
-    const [hasParent] = useState(Number(parentId) !== 0);
+    const { score, checkScore, remark, type, time, url, parentUrl, answer_img, anMark_img, ckMark_img, check_img } = subject;
     const [containerMax, setContainerMax] = useState(0);
     const typeTr = typeof type === 'string' && type !== '' ? type.split(',') : ((Array.isArray(type) && type.length > 0) ? type : []);
     useEffect(() => {

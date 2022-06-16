@@ -37,7 +37,7 @@ export function CanvasCom (props) {
         cRef, id = '0',
         offsetLeft = 0, offsetTop = 0, canvasWidth, canvasHeight = '100%',
         penColor = 1, setFlag, drClear = true, background = 'transparent',
-        questionImages = [], imageDrawed = [], drawImageSrc = ''
+        drawImageSrc = {}
     } = props;
     const [draw, setDraw] = useState(null);
     const [clearing, setClearing] = useState(false);
@@ -166,14 +166,12 @@ export function CanvasCom (props) {
         (async () => {
             if (draw) {
                 draw.clear();
-                if (drawImageSrc) {
-                    const [id, imgSrc] = (drawImageSrc.split('::'));
-                    if (imgSrc) {
-                        try {
-                            await drawImage(imgSrc);
-                        } catch (e) {
-                            console.log(e);
-                        }
+                const _drawImageUrl = drawImageSrc?.drawImageUrl;
+                if (_drawImageUrl) {
+                    try {
+                        await drawImage(_drawImageUrl);
+                    } catch (e) {
+                        console.log(e);
                     }
                 }
             }
@@ -222,13 +220,13 @@ export function CanvasCom (props) {
         </div>
         <div className={'canvasContainer'} id={'canvasDiv'} style={{ width: canvasWidth + 'px', height: canvasHeight + 'px' }}>
             <figure className={'canvasQuestionImages'}>
-                {questionImages.map((img, index) => {
+                {(drawImageSrc?.questionImages ?? []).map((img, index) => {
                     return img ? <img key={index} src={img} alt={index} /> : null;
                 })}
             </figure>
             <div className={'drawedImage'}>
                 {
-                    imageDrawed.map((img, index) => {
+                    (drawImageSrc?.imageDrawed ?? []).map((img, index) => {
                         if (img) {
                             return <figure style={{ zIndex: 92 + index }} key={index}>
                                 <img src={img} alt={index} />
@@ -243,6 +241,6 @@ export function CanvasCom (props) {
                     className={'canvasIncStyle'}
                     style={{ width: canvasWidth + 'px', height: canvasHeight + 'px' }} />
         </div>
-        <div className={`erase ${clearing ? 'show' : 'nor'}`} id={`ER_${id}`} />
+        <div className={`erase ${clearing ? 'show' : 'nor'}`} id={`ER_${id}`} style={{ width: clearWidth * 50 + 'px', height: clearWidth * 50 + 'px' }} />
     </div>;
 }

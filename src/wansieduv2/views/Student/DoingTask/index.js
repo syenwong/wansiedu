@@ -41,8 +41,7 @@ export function DoingTask () {
     const { examName, name } = currentTask || {};
     const [currentSubjectKeyIndex, setCurrentSubjectKeyIndex] = useState(0);
     const [subjects, setSubjects] = useState(null);
-    const [backgroundImages, setBackgroundImages] = useState();
-    const [drawImage, setDrawImage] = useState();
+    const [drawImageSrc, setDrawImageSrc] = useState();
     const [spinning, setSpinning] = useState(false);
     const [subjectsTd, setSubjectsTd] = useState([]);
     const [canvasHeight, setcanvasHeight] = useState(0);
@@ -137,9 +136,11 @@ export function DoingTask () {
     };
     const setCurrentSubject = async (_subjects, noindex) => {
         const subject = _subjects[noindex];
-        const { id, url, parentUrl, answer_img } = subject;
-        setBackgroundImages([parentUrl, url]);
-        setDrawImage(`${id}::${answer_img}`);
+        const { url, parentUrl, answer_img } = subject;
+        setDrawImageSrc({
+            questionImages: [parentUrl, url],
+            drawImageUrl: answer_img
+        });
         setCurrentSubjectKeyIndex(noindex);
     };
     
@@ -212,8 +213,7 @@ export function DoingTask () {
         } else {
             setSpinning(true);
             launchIntoFullscreenHandler();
-            //  window.addEventListener('resize', launchIntoFullscreenHandler);
-            // launchIntoFullscreen(document.documentElement);
+            // 本地测试不使用全屏
             if (!window.location.href.includes('localhost') || window.location.href.includes('full')) {
                 launchIntoFullscreen(document.documentElement);
             }
@@ -227,10 +227,8 @@ export function DoingTask () {
                     setSpinning(false);
                 }
             })();
-            
         }
         return () => {
-            //  window.removeEventListener('resize', launchIntoFullscreenHandler);
             launchExitFullscreen();
         };
     }, []);
@@ -294,8 +292,7 @@ export function DoingTask () {
                                canvasHeight={canvasHeight}
                                canvasWidth={canvasWidth}
                                setFlag={(c) => setSubjectFlag(c)}
-                               questionImages={backgroundImages}
-                               drawImageSrc={drawImage} />
+                               drawImageSrc={drawImageSrc} />
                 </div>
                 <div className={'exercising_draft'}>
                     <CanvasCom id={'draft'}

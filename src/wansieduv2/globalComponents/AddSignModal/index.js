@@ -35,8 +35,7 @@ export function AddSignModal (props) {
     const [canvasWidth, setcanvasWidth] = useState();
     const [offsetTop, setoffsetTop] = useState(0);
     const [offsetLeft, setoffsetLeft] = useState(0);
-    const [markUrl, setMarkUrl] = useState('');
-    const [drawImageSrc, setDrawImageSrc] = useState('');
+    const [drawImageSrc, setDrawImageSrc] = useState({});
     const [submitUrl, setSubmitUrl] = useState('');
     const [penColor, setPenColor] = useState(0);
     const launchIntoFullscreenHandler = () => {
@@ -68,8 +67,11 @@ export function AddSignModal (props) {
                     pCl = 3;
                     break;
             }
-            setMarkUrl(murl);
-            setDrawImageSrc(durl);
+            setDrawImageSrc({
+                questionImages: [parentUrl, url],
+                imageDrawed: [answer_img, check_img, murl],
+                drawImageUrl: durl
+            });
             setSubmitUrl(sburl);
             setPenColor(pCl);
         }
@@ -87,7 +89,7 @@ export function AddSignModal (props) {
                       try {
                           const { formData } = await canvasRef.current.submitDrawImage(sTid, id, type);
                           const api = type === anMark ? addAnswerApi : checkAnswerApi;
-                          await api({ sTid: sTid, subjectId: id, file: formData, url: submitUrl });
+                          await api({ sTid: sTid, subjectId: id, file: formData, url: submitUrl }, true);
                           dispatch({
                               addSubjectSignModalData: null
                           });
@@ -105,9 +107,6 @@ export function AddSignModal (props) {
                    offsetTop={offsetTop}
                    canvasHeight={canvasHeight}
                    canvasWidth={canvasWidth}
-                   questionImages={[parentUrl, url]}
-                   imageDrawed={[answer_img, check_img, markUrl]}
-                   drawImageSrc={`${id}::${drawImageSrc}`} />
-    
+                   drawImageSrc={drawImageSrc} />
     </Modal>;
 }

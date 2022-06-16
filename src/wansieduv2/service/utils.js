@@ -187,7 +187,7 @@ export function launchIntoFullscreen (element) {
 export function launchExitFullscreen () {
     try {
         if (document.exitFullscreen) {
-            document.exitFullscreen();
+            document?.exitFullscreen();
         } else if (document.mozCancelFullscreen) {
             document.mozCancelFullscreen();
         } else if (element.webkitExitFullscreen) {

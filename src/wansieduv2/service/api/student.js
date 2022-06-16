@@ -33,7 +33,7 @@ export async function addSpendApi (sTid, subjectId, spendTime) {
     }
 }
 // /student/addAnswer
-export async function addAnswerApi (params = true) {
+export async function addAnswerApi (params = {}, isRemark = false) {
     try {
         const {
             sTid, subjectId, file, url
@@ -48,7 +48,7 @@ export async function addAnswerApi (params = true) {
             },
             data: file
         };
-        return await Ax.post(`/student/addAnswer`, requestData, otherRequest);
+        return await Ax.post(`/student/${isRemark ? 'remark' : 'addAnswer'}`, requestData, otherRequest);
     } catch (e) {
         throw e;
     }

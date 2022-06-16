@@ -237,20 +237,15 @@ export function CheckAnswerHomework () {
         }
         // 还原
         editSubjectForm.resetFields();
-        // if (childRef?.current?.clear) {
-        //     childRef?.current?.clear();
-        // }
-        // 获取
         const _subject = subjectsList?.[switchSubjectIndex] ?? {};
         const _student = studentList?.[switchStudentIndex] ?? {};
         const an = data?.[_student.id]?.subjectTimeAndAnswersMap?.[_subject?.id] ?? {};
-        const { subjectId, check_img } = an;
-        // 重新赋值 /渲染
         editSubjectForm.setFieldsValue({ score: an?.checkScore === -1 ? an?.score : an?.checkScore });
-        // if (an?.checkUrl) {
-        //     await childRef.current.drawImage(an.checkUrl);
-        // }
-        setDrawImage(`${subjectId}::${check_img}`);
+        setDrawImage({
+            questionImages: [_subject?.parentUrl, _subject?.url],
+            imageDrawed: [an?.answer_img, an?.anMark_img, an?.ckMark_img],
+            drawImageUrl: an?.check_img
+        });
         setCurrentSubject(_subject);
         setCurrentStudent(_student);
         setCurrentSubjectAn(an);
@@ -342,8 +337,6 @@ export function CheckAnswerHomework () {
                                    offsetTop={90}
                                    canvasWidth={canvasWidth}
                                    canvasHeight={canvasHeight}
-                                   questionImages={[currentSubject?.parentUrl, currentSubject?.url]}
-                                   imageDrawed={[currentSubjectAn?.answer_img, currentSubjectAn?.anMark_img, currentSubjectAn?.ckMark_img]}
                                    drawImageSrc={drawImage} />
                     </div>
                 </div>
