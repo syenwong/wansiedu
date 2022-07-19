@@ -44,6 +44,7 @@ export function Login () {
             <div className={'g-loginbg'} />
             <div className={'g-logincontent'}>
                 <h1>万思教育</h1>
+                <h2>Version - 2022.07.18</h2>
                 <div className={'g-loginForm'}>
                     <Form name="qrForm" form={qrForm}
                           className={'g-qrForm'}

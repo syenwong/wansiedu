@@ -19,6 +19,8 @@ import { Draw } from './Draw';
 import { ShakeOutlined, FlagOutlined, DeleteOutlined, StopOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 
+const emptyDrawImageSrc = {};
+
 const penColors = ['#333', '#E50000', '#0091CE', '#ff6803'];
 function dataURLtoFile (dataurl, filename) {//将base64转换为文件，dataurl为base64字符串，filename为文件名（必须带后缀名，如.jpg,.png）
     let binary = atob(dataurl.split(',')[1]);
@@ -37,7 +39,7 @@ export function CanvasCom (props) {
         cRef, id = '0',
         offsetLeft = 0, offsetTop = 0, canvasWidth, canvasHeight = '100%',
         penColor = 1, setFlag, drClear = true, background = 'transparent',
-        drawImageSrc = {}
+        drawImageSrc = emptyDrawImageSrc
     } = props;
     const [draw, setDraw] = useState(null);
     const [clearing, setClearing] = useState(false);
@@ -179,7 +181,7 @@ export function CanvasCom (props) {
     }, [draw, drawImageSrc]);
     return <div className={'m-canvasWrap'} id={`canvasWrap_${id}`} style={{ width: canvasWidth + 'px', height: canvasHeight + 'px', background }}>
         <div className={'drawTool'}>
-            <div className={`Tool  ${clearing ? 'show' : 'hide'}`}>
+            <div className={`Tool ${clearing ? 'show' : 'hide'}`}>
                 <div className={'icon'} onClick={() => {
                     setClear(!clearing);
                 }}><ShakeOutlined /></div>
