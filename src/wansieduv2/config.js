@@ -14,7 +14,7 @@
 module.exports = {
     framework: 'react',
     client: 'pc',
-    version: '1.2.2',
+    version: '1.2.1',
     title: '万思教育',
     proxy: {
         '/edu/': 'http://116.62.33.82/'
